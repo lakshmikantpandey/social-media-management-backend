@@ -1,0 +1,12 @@
+openapi: '3.0.2'
+info:
+  title: Social Media Management
+  version: '1.0.0'
+servers:
+  - url: http://localhost:3002/api/v1/
+paths:
+  /users/login:
+    get:
+      responses:
+        '200':
+          description: To login with username and password
