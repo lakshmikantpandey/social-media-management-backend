@@ -8,3 +8,7 @@ export interface IJwtToken {
 	iat: number;
 	iss: string;
 }
+
+export interface IQueryModel {
+	findById<T>(arg: T): T;
+}

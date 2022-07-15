@@ -1,4 +1,4 @@
-import { IRequest, IResponse } from "../interfaces";
+import { IRequest, IResponse, IUserRegister } from "../interfaces";
 import Controller from "./base.controller";
 
 class UsersController extends Controller {
@@ -8,8 +8,8 @@ class UsersController extends Controller {
 		});
 	}
 
-	createUser(req: IRequest, res: IResponse<any>) {
-		
+	createUser(req: IRequest<IUserRegister>, res: IResponse<any>) {
+		const body = req.body;
 	}
 }
 
