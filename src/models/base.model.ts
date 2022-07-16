@@ -6,4 +6,4 @@ import config from '../config';
 const knex = Knex(config.knex.config);
 Model.knex(knex);
 
-export default class BaseModel extends Model {};
+export class BaseModel extends Model {};

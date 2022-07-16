@@ -34,11 +34,11 @@ exports.seed = async function(knex) {
     {
       first_name: 'Techphant Consulting Group',
       last_name: '',
-      username: 'admin2',
+      username: 'sahadev007',
       email:'',
       mobile:'',
       password: hashPassword('12345'),
-      role: 'admin',
+      role: 'creator',
       is_active: true
     }
   ]);
