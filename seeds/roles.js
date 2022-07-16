@@ -13,8 +13,8 @@ exports.seed = async function(knex) {
       slug:'admin'
     },
     {
-      role:'GUEST',
-      slug:'guest'
+      role:'CREATOR',
+      slug:'creator'
     },
   ]);
 };

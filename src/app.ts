@@ -1,5 +1,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
+import routes from './routes'
+import { errorHandlerMiddleware } from './middlewares';
 
 const ENV: any = process.env;
 const app: Application = express();
@@ -8,11 +10,12 @@ app.use(express.json());
 app.use(cors());
 
 // router
-
-// end
-
 app.get('/', (req, res) => {
-	res.send('VBA');
+	res.send('Social Media Management');
+});
+
+routes.map(route => {
+	app.use(ENV.API_V1, route);
 });
 
 // not found handler
@@ -21,5 +24,8 @@ app.get('*', (req, res) => {
 		message: 'Not Found',
 	});
 });
+
+// error handler
+app.use(errorHandlerMiddleware);
 
 export default app;
