@@ -17,3 +17,5 @@ export interface IUser {
 export type IUserLogin = Pick<IUser, "username" | "password">;
 
 export type IUserRegister = Omit<IUser, "is_deleted" | "is_active">;
+
+export type IUserVerifyToken = Pick<IUser, "id" | "email">;

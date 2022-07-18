@@ -40,6 +40,7 @@ export interface IConfig {
     jwt: {
       secret: string;
 	  expiresIn: string;
+	  issuer: string;
     };
   };
 }
@@ -81,6 +82,7 @@ const config: IConfig = {
 		jwt: {
 			secret: env.JWT_SECRET || 'secret',
 			expiresIn: env.JWT_EXPIRES_IN || '1h',
+			issuer: env.JWT_ISSUER || 'Techphant Consulting Group'
 		},
 	},
 };

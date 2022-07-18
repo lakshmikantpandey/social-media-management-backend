@@ -1,7 +1,12 @@
+import path from "path";
+import { compileFile } from "pug";
 import { ConflictError } from "../errors";
-import { IUserRegister, IUser } from "../interfaces";
+// import { JwtHelper } from "../helpers";
+import { IUserRegister, IUser, IRequest, IUserVerifyToken } from "../interfaces";
 import { User } from "../models";
 import { PasswordUtil } from "../utils";
+import { emailService } from "../services";
+import { jwtHelper } from "../helpers";
 
 class UsersService {
 
@@ -10,8 +15,8 @@ class UsersService {
     }
 
     async createUser(body: IUserRegister) {
-        // validation handle
-        
+
+        // find user
         const user = await this.findByUsername(body.username);
         // check if user exists
         if(user) {
@@ -22,6 +27,21 @@ class UsersService {
         // save user
         const newUser = await User.query().insert(body).castTo<IUser>();
         const { id, first_name, last_name, username, role, email } = newUser;
+        // check if email send
+
+        const token = jwtHelper.createVerifyToken({
+            id: id,
+            email: body.email
+        });
+
+        emailService.sendEmail({
+            to: [ { Email: body.email, Name: body.first_name } ],
+            subject: 'User Registration',
+            html: compileFile(path.join(__dirname, '../views/emails/register.pug'))({ 
+                host: `${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.API_V1}/verify-token?token=${token}`,
+            })
+        });
+
         return { id, first_name, last_name, username, role, email };
     }
 
@@ -29,7 +49,19 @@ class UsersService {
         return await User.query().where('username', username).first().castTo<IUser>();
     }
 
-    verifyUser() {}
+    async verifyUser(req: IRequest) : Promise<IUser> {
+        const decoded: IUserVerifyToken = await jwtHelper.verifyToken(req.query.token as string) as IUserVerifyToken;
+        // get user detail
+        const user = await this.findById(decoded.id || 0) as IUser;
+        if(user.is_active) {
+            throw new ConflictError("User already verified");
+        }
+        // update query
+        await User.query().findById(decoded.id || 0).patch({
+            is_active: true
+        });
+        return user;
+    }
 
 }
 

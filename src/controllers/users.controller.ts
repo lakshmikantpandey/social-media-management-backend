@@ -1,8 +1,7 @@
 import { NextFunction } from "express";
-import { InternalServerError, ValidationError } from "../errors";
-import { IRequest, IResponse, IUserRegister } from "../interfaces";
+import { jwtHelper } from "../helpers";
+import { IRequest, IResponse, IUser, IUserRegister } from "../interfaces";
 import { userService } from "../services";
-import { validateSchema } from "../validations";
 import Controller from "./base.controller";
 
 class UsersController extends Controller {
@@ -14,20 +13,33 @@ class UsersController extends Controller {
 
 	async createUser(req: IRequest<IUserRegister>, res: IResponse<any>, next: NextFunction) {
 		try {
-			// // validate
-			// const validate = await validateSchema.createUser().safeParseAsync(req.body);
-			// if(!validate.success){
-			// 	throw new ValidationError("Validation Error!", validateSchema.formatErrors(validate.error.errors));
-			// }
 			const user = await userService.createUser(req.body);
 			res.json({
-				data: user,
+				data: [],
 				message: 'User register'
 			});
 		} catch (error) {
 			next(error);
 		}
 	}
+
+	async verifyUser(req: IRequest<any>, res: IResponse<any>, next: NextFunction){
+
+		try {
+			// decode jwt
+			const user: IUser = await userService.verifyUser(req);
+			res.json({
+				data: {
+					user: user.email
+				},
+				message: 'User Verified'
+			});
+		} catch (error) {
+			next(error);
+		}
+
+	}
+
 }
 
 export default new UsersController();

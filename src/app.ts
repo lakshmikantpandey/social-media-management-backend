@@ -9,9 +9,15 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 
+// views render
+app.set('view engine', 'pug');
+
 // router
 app.get('/', (req, res) => {
-	res.send('Social Media Management');
+	// res.send('Social Media Management');
+	res.json({
+		msg: 'Social Media Management'
+	})
 });
 
 routes.map(route => {
