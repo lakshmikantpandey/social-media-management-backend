@@ -17,6 +17,11 @@ export const validateSchema = {
             role: z.string().min(1)
         })
     }),
+    verifyUserToken: z.object({
+        query: z.object({
+            token: z.string().min(1)
+        })
+    }),
     formatErrors: (errors: ZodIssue[]) => {
         return errors.map((error) => `${error.path[0]} - ${error.message}`);
     }

@@ -5,5 +5,6 @@ import { validateSchema } from "../validations";
 
 const usersRouter = Router();
 usersRouter.post('/users/register', validSchema(validateSchema.registerUser) , UsersController.createUser);
+usersRouter.get('/users/verify-user', validSchema(validateSchema.verifyUserToken), UsersController.verifyUser);
 
 export default usersRouter;
