@@ -1,6 +1,7 @@
 import { IRequest, IResponse } from "./response.interface";
-import { IUserLogin, IUserRegister, IUser, IUserVerifyToken } from "./user.interface";
+import { IUserLogin, IUserRegister, IUser, IUserVerifyToken, IUserEdit, IChangePassword, IForgetPassword } from "./user.interface";
 import { IJwtToken } from "./common.interface";
+import { IChannel } from "./channel.interface";
 
 export {
 	IRequest,
@@ -9,5 +10,9 @@ export {
 	IUserLogin,
 	IUserRegister,
 	IJwtToken,
-	IUserVerifyToken
+	IUserVerifyToken,
+	IUserEdit,
+	IChangePassword,
+	IForgetPassword,
+	IChannel
 };

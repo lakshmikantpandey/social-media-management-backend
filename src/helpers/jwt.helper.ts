@@ -57,7 +57,7 @@ class JwtHelper {
             payload,
             jwt.secret,
             {
-                expiresIn: '24h',
+                expiresIn: '5h',
                 issuer: jwt.issuer,
                 algorithm: 'HS512'
             }
