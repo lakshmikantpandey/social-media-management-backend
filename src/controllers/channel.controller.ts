@@ -5,7 +5,7 @@ import Controller from "./base.controller";
 
 class ChannelController extends Controller {
     
-    async getChannels(req: IRequest, res: IResponse<IChannel[]>, next: NextFunction) {
+    async getChannels(req: IRequest, res: IResponse<IChannel[]>) {
         const channels = await channelService.getChannels();
         res.json({
             data: channels,
@@ -14,7 +14,7 @@ class ChannelController extends Controller {
     }
 
     // TODO : Pending Assign User to Channel
-    async assignChannel(req: IRequest, res: IResponse<any>, next: NextFunction) {
+    async assignChannel(req: IRequest, res: IResponse<any>) {
         res.json({
             message: "Channel Assigned"
         });
