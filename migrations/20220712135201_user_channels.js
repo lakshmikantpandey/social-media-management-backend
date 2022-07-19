@@ -12,6 +12,8 @@ exports.up = function(knex) {
 				table.bigInteger('user_id').notNullable();
 				table.string('channel_type').notNullable();
 				table.json('settings').notNullable();
+				table.date("expired_at").nullable();
+				table.boolean('is_active').defaultTo(false);
 				table.dateTime('deleted_at').nullable().defaultTo(null);
 				table.timestamps(true, true);
 			});

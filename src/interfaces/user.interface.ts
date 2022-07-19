@@ -19,3 +19,14 @@ export type IUserLogin = Pick<IUser, "username" | "password">;
 export type IUserRegister = Omit<IUser, "is_deleted" | "is_active">;
 
 export type IUserVerifyToken = Pick<IUser, "id" | "email">;
+
+export type IUserEdit = Pick<IUser, "first_name" | "last_name" | "mobile">;
+
+export interface IChangePassword {
+	old_password: string;
+	new_password: string;
+}
+
+export interface IForgetPassword {
+	email: string
+}

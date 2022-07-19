@@ -1,8 +1,9 @@
 export interface IJwtToken {
 	id: number;
-	mobile: string;
+	first_name: string;
+	last_name?: string;
 	role: string;
-	token_id: string;
+	email: string;
 	tz?: string;
 	exp: number;
 	iat: number;

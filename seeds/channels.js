@@ -10,20 +10,26 @@ exports.seed = async function(knex) {
     {
       channel: 'Facebook',
       slug:'FB',
-      image:'',
+      image: `fb.svg`,
       is_active: true
     },
     {
       channel: 'LinkedIn',
       slug:'Ln',
-      image:'',
+      image:'ln.svg',
       is_active: true
     },
     {
       channel: 'Instagram',
       slug:'In',
-      image:'',
+      image:'in.svg',
       is_active: true
+    },
+    {
+      channel: 'Twitter',
+      slug:'Tw',
+      image:'tw.svg',
+      is_active: false
     }
   ]);
 };
