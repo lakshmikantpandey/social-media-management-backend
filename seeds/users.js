@@ -22,6 +22,7 @@ exports.seed = async function(knex) {
   await knex($table).del();
   await knex($table).insert([
     {
+      parent_id: 0,
       first_name: 'Techphant Consulting Group',
       last_name: '',
       username: 'admin',
@@ -32,6 +33,7 @@ exports.seed = async function(knex) {
       is_active: true
     },
     {
+      parent_id: 0,
       first_name: 'Techphant Consulting Group',
       last_name: '',
       username: 'creator',
