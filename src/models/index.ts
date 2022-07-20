@@ -1,7 +1,8 @@
 import { User } from "./user.model";
-import { Channel } from "./channel.model";
+import { Channel, UserChannel } from "./channel.model";
 
 export {
     User,
-    Channel
+    Channel,
+    UserChannel
 };

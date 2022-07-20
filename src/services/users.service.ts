@@ -127,8 +127,7 @@ class UsersService {
 
     async forgetPassword(email:string) {
         // check if email exists
-        const user = await User
-            .query()
+        const user = await User.query()
             .where("email", email)
             .first();
         if(!user){
