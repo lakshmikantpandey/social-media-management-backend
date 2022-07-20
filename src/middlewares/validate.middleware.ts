@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AnyZodObject } from "zod";
 import { HttpCode } from "../enums";
-import { ValidationError } from "../errors";
-import { validateSchema } from "../validations";
 
 export const validSchema = (schema: AnyZodObject) => {
     return async (req: Request, res: Response, next: NextFunction) => {

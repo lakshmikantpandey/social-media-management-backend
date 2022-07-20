@@ -1,4 +1,6 @@
 import { z, ZodIssue } from "zod";
+import { Channel } from "../models";
+
 
 export const validateSchema = {
     createUser: () => z.object({
@@ -44,6 +46,22 @@ export const validateSchema = {
     forgetPassword: z.object({
         body: z.object({
             email: z.string().email(),
+        })
+    }),
+    assignChannel: z.object({
+        body: z.object({
+            channel_type: z.string(),
+            settings: z.object({ token: z.string().min(1), id: z.string() })
+        })
+    }),
+    removeChannel: z.object({
+        params: z.object({
+            id: z.any()
+        })
+    }),
+    getSocialAccounts: z.object({
+        query: z.object({
+            social_type: z.string().min(1)
         })
     }),
     formatErrors: (errors: ZodIssue[]) => {

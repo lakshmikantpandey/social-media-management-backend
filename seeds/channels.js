@@ -9,7 +9,7 @@ exports.seed = async function(knex) {
   await knex($table).insert([
     {
       channel: 'Facebook',
-      slug:'FB',
+      slug:'Fb',
       image: `fb.svg`,
       is_active: true
     },
