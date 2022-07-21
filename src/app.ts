@@ -20,6 +20,8 @@ app.get('/', (req, res) => {
 	})
 });
 
+// open routes
+
 routes.map(route => {
 	app.use(ENV.API_V1, route);
 });

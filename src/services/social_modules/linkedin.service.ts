@@ -9,11 +9,12 @@ const ENV = process.env;
 class Linkedin implements social {
 
     config: LinkedinServiceConfig;
+    name: string = "Linkedin";
 
     constructor(config: LinkedinServiceConfig) {
         this.config = config;
     }
-    name: string = "Linkedin";
+    
     async getUser(params: { Token: string }): Promise<{ FirstName: string; LastName: string; Username: string; id: any; Following: any; Followers: any; }> {
         const url = "https://api.linkedin.com/v2/me";
         try {
