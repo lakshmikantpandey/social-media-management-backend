@@ -1,8 +1,9 @@
 import { IRequest, IResponse } from "./response.interface";
 import { IUserLogin, IUserRegister, IUser, IUserVerifyToken, IUserEdit, IChangePassword, IForgetPassword } from "./user.interface";
 import { IJwtToken } from "./common.interface";
-import { IChannel, IUserChannel, IAssignChannel, IRemoveChannel } from "./channel.interface";
-import { ISocialType } from "./social.interface";
+import { IChannel, IUserChannel, IAssignChannel, IRemoveChannel, IChannelState } from "./channel.interface";
+import { ISocialType, IVerifyLinkedin } from "./social.interface";
+import { ICampaign, ICreateCampaign, ICreateCampaignBody, IEditCampaignBody } from "./campaign.interface";
 
 export {
 	IRequest,
@@ -19,5 +20,11 @@ export {
 	IUserChannel,
 	IAssignChannel,
 	IRemoveChannel,
-	ISocialType
+	ISocialType,
+	IVerifyLinkedin,
+	IChannelState,
+	ICampaign,
+	ICreateCampaign,
+	ICreateCampaignBody,
+	IEditCampaignBody
 };

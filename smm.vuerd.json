@@ -3,8 +3,8 @@
     "version": "2.2.11",
     "width": 3000,
     "height": 3000,
-    "scrollTop": -422.6666666666655,
-    "scrollLeft": -727.3333333333339,
+    "scrollTop": -205,
+    "scrollLeft": -176,
     "zoomLevel": 0.9,
     "show": {
       "tableComment": true,
@@ -412,9 +412,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 516.5742,
-          "top": 233.4622,
-          "zIndex": 1,
+          "left": 547.6851,
+          "top": 226.7956,
+          "zIndex": 10,
           "widthName": 88.6962890625,
           "widthComment": 60
         },
@@ -1269,7 +1269,7 @@
           "active": false,
           "left": 967.3333,
           "top": 490.6671,
-          "zIndex": 9,
+          "zIndex": 8,
           "widthName": 67.75537109375,
           "widthComment": 60
         },
@@ -1302,8 +1302,8 @@
           "columnIds": [
             "8a57bd57-cf1a-4acc-b52c-74cac338bc0c"
           ],
-          "x": 516.5742,
-          "y": 298.7122,
+          "x": 547.6851,
+          "y": 292.04560000000004,
           "direction": "left"
         },
         "constraintName": "fk_users_to_user role map",
@@ -1328,8 +1328,8 @@
           "columnIds": [
             "e5fb1b2b-4e02-483c-9e8a-950584a85399"
           ],
-          "x": 869.69675859375,
-          "y": 298.7122,
+          "x": 900.80765859375,
+          "y": 292.04560000000004,
           "direction": "right"
         },
         "constraintName": "fk_roles_to_user role map",

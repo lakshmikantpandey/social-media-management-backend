@@ -1,11 +1,13 @@
 import userService from "./users.service";
 import emailService from "./email.service";
 import channelService from "./channels.service";
-import SocialService from "./social.service";
+import socialService from "./social.service";
+import campaignService from "./campaign.service";
 
 export {
     userService,
     emailService,
     channelService,
-    SocialService
+    socialService,
+    campaignService
 };

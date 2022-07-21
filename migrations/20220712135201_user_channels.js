@@ -11,10 +11,11 @@ exports.up = function(knex) {
 				table.bigIncrements();
 				table.bigInteger('user_id').notNullable();
 				table.string('channel_type').notNullable();
-				table.json('settings').notNullable();
+				table.json('settings').nullable();
 				table.date("expired_at").nullable();
 				table.boolean('is_active').defaultTo(false);
 				table.dateTime('deleted_at').nullable().defaultTo(null);
+				table.string('channel_state').nullable();
 				table.timestamps(true, true);
 			});
 		}

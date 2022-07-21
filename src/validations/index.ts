@@ -64,6 +64,30 @@ export const validateSchema = {
             social_type: z.string().min(1)
         })
     }),
+    verifyLinkedin: z.object({
+        body: z.object({
+            code: z.string().min(1),
+            state: z.string().min(1)
+        })
+    }),
+    createCampaign: z.object({
+        body: z.object({
+            name: z.string().min(1),
+            color: z.string().min(1)
+        })
+    }),
+    editCampaign: z.object({
+        body: z.object({
+            id: z.number().nonnegative(),
+            name: z.string().min(1),
+            color: z.string().min(1)
+        })
+    }),
+    deleteCampaign: z.object({
+        params: z.object({
+            id: z.string().min(1),
+        })
+    }),
     formatErrors: (errors: ZodIssue[]) => {
         return errors.map((error) => `${error.path[0]} - ${error.message}`);
     }

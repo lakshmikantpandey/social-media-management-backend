@@ -1,6 +1,6 @@
 import moment from "moment";
-import { NotFoundError } from "../errors";
-import { IAssignChannel, IChannel, IUserChannel, IRequest } from "../interfaces";
+import { InternalServerError, NotFoundError } from "../errors";
+import { IAssignChannel, IChannel, IUserChannel, IRequest, IChannelState } from "../interfaces";
 import { Channel, UserChannel } from "../models";
 import { MomentTZ } from "../utils";
 
@@ -33,6 +33,14 @@ class ChannelService {
             deleted_at: MomentTZ().format("YYYY-MM-DD"),
             is_active: false
         });
+    }
+
+    async createChannelState(body: IChannelState) {
+        try {
+            await UserChannel.query().insert(body);
+        } catch (error) {
+            throw error;
+        }
     }
 
 }
