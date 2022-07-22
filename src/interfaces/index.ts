@@ -4,6 +4,7 @@ import { IJwtToken } from "./common.interface";
 import { IChannel, IUserChannel, IAssignChannel, IRemoveChannel, IChannelState } from "./channel.interface";
 import { ISocialType, IVerifyLinkedin } from "./social.interface";
 import { ICampaign, ICreateCampaign, ICreateCampaignBody, IEditCampaignBody } from "./campaign.interface";
+import { IInviteMember } from "./teams.interface";
 
 export {
 	IRequest,
@@ -26,5 +27,6 @@ export {
 	ICampaign,
 	ICreateCampaign,
 	ICreateCampaignBody,
-	IEditCampaignBody
+	IEditCampaignBody,
+	IInviteMember
 };
