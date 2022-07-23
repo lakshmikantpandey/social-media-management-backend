@@ -6,5 +6,6 @@ import { validateSchema } from "../validations";
 const teamsRouter = Router();
 
 teamsRouter.post('/teams/invite-member', [ validSchema(validateSchema.inviteMember), jwtMiddleware ], TeamsController.inviteMember);
+teamsRouter.post('/teams/verify', [ validSchema(validateSchema.verifyMember) ], TeamsController.verifyInvitation);
 
 export default teamsRouter;

@@ -11,3 +11,8 @@ export interface IInviteMember {
     admin_access: boolean;
     channels: IChannel[];
 }
+
+export interface IVerifyMember {
+    token: string;
+    password: string;
+}

@@ -99,6 +99,12 @@ export const validateSchema = {
             })).nonempty()
         })
     }),
+    verifyMember: z.object({
+        body: z.object({
+            password: z.string().min(1),
+            token: z.string().min(1)
+        })
+    }),
     formatErrors: (errors: ZodIssue[]) => {
         return errors.map((error) => `${error.path[0]} - ${error.message}`);
     }
