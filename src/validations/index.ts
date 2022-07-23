@@ -1,6 +1,6 @@
 import { z, ZodIssue } from "zod";
-import { Channel } from "../models";
 
+const ROLES = ["creator", "sub-creator"] as const;
 
 export const validateSchema = {
     createUser: () => z.object({
@@ -8,7 +8,7 @@ export const validateSchema = {
         username: z.string().min(2),
         email: z.string().email(),
         password: z.string().min(5),
-        role: z.string().min(1)
+        role: z.enum(ROLES)
     }),
     registerUser: z.object({
         body: z.object({
@@ -86,6 +86,23 @@ export const validateSchema = {
     deleteCampaign: z.object({
         params: z.object({
             id: z.string().min(1),
+        })
+    }),
+    inviteMember: z.object({
+        body: z.object({
+            first_name: z.string().min(1),
+            email: z.string().email(),
+            admin_access: z.boolean(),
+            channels: z.array(z.object({
+                channel: z.number(),
+                access_level: z.enum(["full_posting_access", "approval_required"])
+            })).nonempty()
+        })
+    }),
+    verifyMember: z.object({
+        body: z.object({
+            password: z.string().min(1),
+            token: z.string().min(1)
         })
     }),
     formatErrors: (errors: ZodIssue[]) => {
