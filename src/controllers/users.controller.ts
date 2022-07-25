@@ -1,6 +1,6 @@
 import { NextFunction } from "express";
-import { IChangePassword, IForgetPassword, IRequest, IResponse, IUser, IUserEdit, IUserLogin, IUserRegister } from "../interfaces";
-import { userService } from "../services";
+import { IChangePassword, IForgetPassword, IRequest, IResponse, IUser, IUserEdit, IUserLogin, IUserRegister, IUserSchedules } from "../interfaces";
+import { userService, userSettingService } from "../services";
 import usersSrevice from "../services/users.service";
 import Controller from "./base.controller";
 

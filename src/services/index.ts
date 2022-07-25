@@ -4,6 +4,7 @@ import channelService from "./channels.service";
 import socialService from "./social.service";
 import campaignService from "./campaign.service";
 import teamsService from "./teams.service";
+import userSettingService from "./user-settings.service";
 
 export {
     userService,
@@ -11,5 +12,6 @@ export {
     channelService,
     socialService,
     campaignService,
-    teamsService
+    teamsService,
+    userSettingService
 };

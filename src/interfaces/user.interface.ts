@@ -31,3 +31,7 @@ export interface IChangePassword {
 export interface IForgetPassword {
 	email: string
 }
+
+export interface IUserSchedules {
+	arg: string;
+}
