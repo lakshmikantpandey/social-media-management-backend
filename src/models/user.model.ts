@@ -16,3 +16,8 @@ export class User extends BaseModel {
         }
     }
 }
+
+export class UserSetting extends BaseModel {
+    static tableName = 'user_settings';
+	static idColumn = 'id';
+}

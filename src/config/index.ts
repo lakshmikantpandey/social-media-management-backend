@@ -29,6 +29,11 @@ export interface PasswordConfig {
   ALGO: string;
 }
 
+export interface ITimer {
+	days: string[];
+	times: string[]
+}
+
 export interface IConfig {
   env: string;
   app: {
@@ -43,6 +48,9 @@ export interface IConfig {
 	  issuer: string;
     };
   };
+  tz: string;
+  schedules?: ITimer[];
+  permissions?: string[];
 }
 
 // use this snippet to create a config file from env variables
@@ -85,6 +93,34 @@ const config: IConfig = {
 			issuer: env.JWT_ISSUER || 'Techphant Consulting Group'
 		},
 	},
+	tz: env.TZ || '',
+	schedules: [
+		{
+			days: ['mon'],
+			times: ['09:15', '17:05']
+		},
+		{
+			days: ['tue'],
+			times: ['09:15', '17:05']
+		},
+		{
+			days: ['wed'],
+			times: ['09:15', '17:05']
+		},
+		{
+			days: ['thu'],
+			times: ['09:15', '17:05']
+		},
+		{
+			days: ['fri'],
+			times: ['09:15', '17:05']
+		},
+		{
+			days: ['sat'],
+			times: ['09:15', '17:05']
+		},
+	],
+	permissions: ['sp_read']
 };
 
 export default config;

@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import config from "../config";
 import { InternalServerError, NotFoundError } from "../errors";
 import { IVerifyLinkedin } from "../interfaces";
 import { Channel, UserChannel } from "../models";
@@ -21,7 +22,10 @@ class SocialService {
             user_id: State,
             is_active: false,
             channel_type: 'Ln',
-            channel_state: state
+            channel_token: state,
+            permissions: JSON.stringify(config.permissions),
+            schedules: JSON.stringify(config.schedules),
+            timezone: config.tz
         });
         return socialAccounts[social_type].getAuth({ State: state });
     }
@@ -37,13 +41,13 @@ class SocialService {
                 first_name: user.FirstName,
                 last_name: user.LastName,
                 token: accessToken.Token
-            };            
+            };
             // save linkedin setting to 
             await UserChannel.query().patch({
-                settings: JSON.stringify(auth),
+                user_auth: JSON.stringify(auth),
                 expired_at: accessToken.ExpireDate,
                 is_active: true
-            }).where('channel_state',  decodeURIComponent(body.state));
+            }).where('channel_token',  decodeURIComponent(body.state));
 
             return {
                 first_name: user.FirstName,

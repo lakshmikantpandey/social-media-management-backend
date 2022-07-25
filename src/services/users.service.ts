@@ -29,7 +29,6 @@ class UsersService {
         const newUser = await User.query().insert(body).castTo<IUser>();
         const { id, first_name, last_name, username, role, email } = newUser;
         // check if email send
-
         const token = jwtHelper.createVerifyToken({
             id: id,
             email: body.email
@@ -38,12 +37,12 @@ class UsersService {
         emailService.sendEmail({
             to: [ { Email: body.email, Name: body.first_name } ],
             subject: 'User Registration',
-            html: compileFile(path.join(__dirname, '../views/emails/register.pug'))({ 
+            html: compileFile(path.join(__dirname, '../views/emails/register.pug'))({
                 host: `${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.API_V1}/verify-token?token=${token}`,
             })
         });
 
-        return { id, first_name, last_name, username, role, email, token };
+        return { id, first_name, last_name, username, role, email };
     }
 
     async findByUsername(username: string): Promise<IUser> {

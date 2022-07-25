@@ -1,5 +1,6 @@
 import moment from "moment-timezone"
+import config from "../config";
 
-export default (date= new Date(), tz = 'Asia/Kolkata') => {
+export default (date= new Date(), tz = config.tz) => {
     return moment(date).tz(tz);
-}
+};

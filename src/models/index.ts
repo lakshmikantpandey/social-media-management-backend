@@ -1,4 +1,4 @@
-import { User } from "./user.model";
+import { User, UserSetting } from "./user.model";
 import { Channel, UserChannel } from "./channel.model";
 import { Campaign } from "./campaign.model";
 import { Team } from "./team.model";
@@ -8,5 +8,6 @@ export {
     Channel,
     UserChannel,
     Campaign,
-    Team
+    Team,
+    UserSetting
 };
