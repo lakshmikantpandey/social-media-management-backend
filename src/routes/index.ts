@@ -3,11 +3,13 @@ import usersRouter from "./users.router";
 import socialRouter from "./social.router";
 import campaignRouter from "./campaign.router";
 import teamsRouter from "./teams.router";
+import userChannelRouter from "./user-channel.router";
 
 export default [
     usersRouter,
     channelRoute,
     socialRouter,
     campaignRouter,
-    teamsRouter
+    teamsRouter,
+    userChannelRouter
 ];

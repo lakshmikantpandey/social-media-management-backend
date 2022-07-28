@@ -1,14 +1,22 @@
+import { IUserChannelPermissions, IUserChannelSchedules, IUserChannelTimezone } from "../interfaces";
+import { UserChannel } from "../models";
 
 class UserChannelService {
 
-    // TODO : Update Channel schedules
-    updateSchedules() {
-        
+    // DONE : Update Channel schedules
+    async updateSchedules(body: IUserChannelSchedules) {
+        // update query
+        await UserChannel.query().patch({
+            schedules: body.arg
+        }).where('id', body.channel_id);
     }
 
     // TODO: Update timezone
-    updateTimezone() {
-
+    async updateTimezone(body: IUserChannelTimezone) {
+        // update timezone
+        await UserChannel.query().patch({
+            timezone: body.tz
+        }).where('id', body.channel_id);
     }
 
 }

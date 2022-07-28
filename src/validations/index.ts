@@ -105,6 +105,18 @@ export const validateSchema = {
             token: z.string().min(1)
         })
     }),
+    userChannelSchedules: z.object({
+        body: z.object({
+            arg: z.string().min(1),
+            channel_id: z.number().nonnegative()
+        })
+    }),
+    userChannelTimezone: z.object({
+        body: z.object({
+            tz: z.string().min(1),
+            channel_id: z.number().nonnegative()
+        })
+    }),
     formatErrors: (errors: ZodIssue[]) => {
         return errors.map((error) => `${error.path[0]} - ${error.message}`);
     }
