@@ -1,17 +1,32 @@
 import { NextFunction } from "express";
-import { IRequest, IResponse } from "../interfaces";
+import { IRequest, IResponse, IUserChannelPermissions, IUserChannelSchedules, IUserChannelTimezone } from "../interfaces";
+import { userChannelService } from "../services";
 import Controller from "./base.controller";
 
 class UserChannelController extends Controller {
     
     // TODO
-    updateSchedules(req: IRequest<any>, res: IResponse<any>, next: NextFunction) {
-
+    async updateSchedules(req: IRequest<IUserChannelSchedules>, res: IResponse<any>, next: NextFunction) {
+        try {
+            await userChannelService.updateSchedules(req.body);
+            res.json({
+                message:"Schedules updated successfully!"
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 
     // TODO
-    updateTimezone(req: IRequest<any>, res: IResponse<any>, next: NextFunction) {
-
+    async updateTimezone(req: IRequest<IUserChannelTimezone>, res: IResponse<any>, next: NextFunction) {
+        try {
+            await userChannelService.updateTimezone(req.body);
+            res.json({
+                message:"Timezone updated successfully!"
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 
 }
