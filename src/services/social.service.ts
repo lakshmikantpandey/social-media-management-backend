@@ -1,7 +1,8 @@
 import { nanoid } from "nanoid";
+import { ref } from "objection";
 import config from "../config";
-import { InternalServerError, NotFoundError } from "../errors";
-import { IVerifyLinkedin } from "../interfaces";
+import { NotFoundError, UnauthorizedError } from "../errors";
+import { IFacebookPages, IRequest, ISelectedFacebookPage, ISelectedFacebookPages, ISocialType, IVerifyFacebook, IVerifyLinkedin } from "../interfaces";
 import { Channel, UserChannel } from "../models";
 import { Base64 } from "../utils";
 import channelService from "./channels.service";
@@ -21,7 +22,7 @@ class SocialService {
         await channelService.createChannelState({
             user_id: State,
             is_active: false,
-            channel_type: 'Ln',
+            channel_type: social_type,
             channel_token: state,
             permissions: JSON.stringify(config.permissions),
             schedules: JSON.stringify(config.schedules),
@@ -57,6 +58,80 @@ class SocialService {
         } catch (error) {
             throw error;
         }
+    }
+
+    async verifyFacebook(body: IVerifyFacebook) {
+        try {
+            const accessToken = await socialAccounts["Fb"].getAccessToken({ Code: body.code });
+            // save in database
+            const auth = {
+                id: "",
+                first_name: "No page selected",
+                last_name: "",
+                token: accessToken.Token,
+                pages: [],
+                selected_page: {}
+            };
+            // In this query we replacing facebook redirect fragment string
+            await UserChannel.query().patch({
+                user_auth: JSON.stringify(auth),
+                expired_at: accessToken.ExpireDate,
+                is_active: true
+            }).where('channel_token', decodeURIComponent(body.state.replace('#_=_', '')));
+            return accessToken.Token ? true : false;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    private async _getLatestSocialAccount(req: IRequest<any>) {
+        return await UserChannel.query()
+            .select(
+                'id',
+                'user_id',
+                ref('user_auth:pages').castJson().as('pages'),
+                ref('user_auth:token').castJson().as('token'),
+                "channel_type"
+            )
+            .where('channel_type', req.params.social_type)
+            .andWhere('is_active', true)
+            .andWhere('user_id', req.user?.id || '')
+            .orderBy('expired_at', 'DESC')
+            .first().castTo<IFacebookPages>();
+    }
+
+    async getPages(req: IRequest<any>) {
+        const socialAuth = await this._getLatestSocialAccount(req);
+        if(!socialAuth) {
+            throw new UnauthorizedError("Invalid token!");
+        }
+        // get pages
+        const pageLists = await socialAccounts[req.params.social_type].getPages({
+            Token: socialAuth.token
+        });
+        // DONE : save in user channel table
+        if(pageLists.length > 0) {
+            const channelPage = UserChannel.knex();
+            await channelPage.raw(`update "user_channels" set "user_auth" = jsonb_set(to_jsonb("user_auth"), '{pages}', to_jsonb(?::text), true) where "id" = ?`, [
+                JSON.stringify(pageLists),
+                socialAuth.id || 0
+            ]);
+        }
+
+        return pageLists.map((page) => {
+            const { Name, Id, ProfilePicture } = page;
+            return {
+                Id, Name, ProfilePicture,
+                channelId: socialAuth.id
+            };
+        });
+    }
+
+    async saveFacebookPage(body: ISelectedFacebookPage) {
+        const socialPages = await UserChannel.query()
+            .select('id', ref('user_auth:pages').castText().as('pages'))
+            .where('id', body.userChannelId).castTo<ISelectedFacebookPages[]>();
+        return socialPages;
     }
 
 }
