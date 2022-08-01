@@ -1,4 +1,4 @@
-import { z, ZodIssue } from "zod";
+import { number, z, ZodIssue } from "zod";
 
 const ROLES = ["creator", "sub-creator"] as const;
 
@@ -120,6 +120,12 @@ export const validateSchema = {
     getPages: z.object({
         params: z.object({
             social_type: z.string().min(1)
+        })
+    }),
+    savePage: z.object({
+        body: z.object({
+            pageIndex: z.number().nonnegative(),
+            userChannelId: z.number().nonnegative()
         })
     }),
     formatErrors: (errors: ZodIssue[]) => {

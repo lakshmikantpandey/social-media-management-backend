@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { ref } from "objection";
 import config from "../config";
 import { NotFoundError, UnauthorizedError } from "../errors";
-import { IFacebookPages, IRequest, ISocialType, IVerifyFacebook, IVerifyLinkedin } from "../interfaces";
+import { IFacebookPages, IRequest, ISelectedFacebookPage, ISelectedFacebookPages, ISocialType, IVerifyFacebook, IVerifyLinkedin } from "../interfaces";
 import { Channel, UserChannel } from "../models";
 import { Base64 } from "../utils";
 import channelService from "./channels.service";
@@ -109,16 +109,29 @@ class SocialService {
         const pageLists = await socialAccounts[req.params.social_type].getPages({
             Token: socialAuth.token
         });
-        // TODO : save in user channel table
+        // DONE : save in user channel table
         if(pageLists.length > 0) {
-            await UserChannel.query().patch({
-                'user_auth:pages': JSON.stringify(pageLists)
-            });
-            // const channelPage = UserChannel.knex();
-            // await channelPage.raw(`update "user_channels" set "user_auth" = jsonb_set("user_auth.pages", '{pages}', to_jsonb('${JSON.stringify(pageLists)}'::json), true) where id=${socialAuth.id}`);
+            const channelPage = UserChannel.knex();
+            await channelPage.raw(`update "user_channels" set "user_auth" = jsonb_set(to_jsonb("user_auth"), '{pages}', to_jsonb(?::text), true) where "id" = ?`, [
+                JSON.stringify(pageLists),
+                socialAuth.id || 0
+            ]);
         }
 
-        return pageLists;
+        return pageLists.map((page) => {
+            const { Name, Id, ProfilePicture } = page;
+            return {
+                Id, Name, ProfilePicture,
+                channelId: socialAuth.id
+            };
+        });
+    }
+
+    async saveFacebookPage(body: ISelectedFacebookPage) {
+        const socialPages = await UserChannel.query()
+            .select('id', ref('user_auth:pages').castText().as('pages'))
+            .where('id', body.userChannelId).castTo<ISelectedFacebookPages[]>();
+        return socialPages;
     }
 
 }

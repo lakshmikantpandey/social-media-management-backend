@@ -1,5 +1,5 @@
 import { NextFunction } from "express";
-import { IRequest, IResponse, ISocialType, IVerifyFacebook, IVerifyLinkedin } from "../interfaces";
+import { IRequest, IResponse, ISelectedFacebookPage, ISocialType, IVerifyFacebook, IVerifyLinkedin } from "../interfaces";
 import { socialService } from "../services";
 import Controller from "./base.controller";
 
@@ -54,6 +54,19 @@ class SocialController extends Controller {
             });
         } catch (error) {
             console.log("Errors: ", error);
+            next(error);
+        }
+    }
+
+    // TODO : save selected social page
+    async saveFacebookPage(req: IRequest<ISelectedFacebookPage>, res: IResponse<any>, next: NextFunction){
+        try {
+            const pages = await socialService.saveFacebookPage(req.body);
+            res.json({
+                message: "Page saved successfully",
+                data: pages
+            });
+        } catch (error) {
             next(error);
         }
     }

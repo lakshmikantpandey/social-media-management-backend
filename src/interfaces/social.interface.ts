@@ -16,3 +16,10 @@ export interface IFacebookPages {
     token: string;
     channel_type: string;
 }
+
+export interface ISelectedFacebookPage {
+    pageIndex: number;
+    userChannelId: number;
+}
+
+export type ISelectedFacebookPages = Pick<IFacebookPages, "id" | "pages">;
