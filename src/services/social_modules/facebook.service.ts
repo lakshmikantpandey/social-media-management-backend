@@ -55,11 +55,9 @@ class Facebook implements social {
             if (body.access_token === '') {
                 throw new Error("Unauthorized access. Please try again");
             }
-
             return {
                 Token: body.access_token,
                 ExpireDate: moment().add(60, 'days').format('YYYY-MM-DD HH:mm:ss'),
-                // ExpireDate:moment().add(body.expires_in,'seconds').format('YYYY-MM-DD HH:mm:ss'),
                 Error: null
             }
         } catch (error) {

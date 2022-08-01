@@ -64,7 +64,7 @@ export const validateSchema = {
             social_type: z.string().min(1)
         })
     }),
-    verifyLinkedin: z.object({
+    verifySocialAccount: z.object({
         body: z.object({
             code: z.string().min(1),
             state: z.string().min(1)
@@ -115,6 +115,11 @@ export const validateSchema = {
         body: z.object({
             tz: z.string().min(1),
             channel_id: z.number().nonnegative()
+        })
+    }),
+    getPages: z.object({
+        params: z.object({
+            social_type: z.string().min(1)
         })
     }),
     formatErrors: (errors: ZodIssue[]) => {
