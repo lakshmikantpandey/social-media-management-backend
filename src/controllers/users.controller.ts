@@ -52,9 +52,7 @@ class UsersController extends Controller {
 		res.json({
 			message: 'User edited successfully!',
 			data: {
-				...req.body,
-				email: req.user?.email,
-				id: req.user?.id
+				...req.body
 			}
 		});
 	}

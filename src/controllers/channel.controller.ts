@@ -8,7 +8,10 @@ class ChannelController extends Controller {
     async getChannels(req: IRequest, res: IResponse<IChannel[]>) {
         const channels = await channelService.getChannels();
         res.json({
-            data: channels,
+            data: channels.map((channel) => {
+                channel.image = `${process.env.IMAGE_URL}icons/${channel.image}`;
+                return channel;
+            }),
             message: "Channels"
         });
     }
@@ -31,6 +34,20 @@ class ChannelController extends Controller {
             await channelService.removeChannel(req.params.id);
             res.json({
                 message: 'channel deleted successfully!'
+            });
+        } catch (error) {
+            console.log(error);
+            
+            next(error);
+        }
+    }
+
+    async getAuthChennels(req: IRequest, res: IResponse<any>, next: NextFunction){
+        try {
+            const channels = await channelService.getAuthChannels(req);
+            res.json({
+                message: "OK",
+                data: channels
             });
         } catch (error) {
             next(error);

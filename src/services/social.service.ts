@@ -36,7 +36,9 @@ class SocialService {
             // get access token and user info
             const accessToken = await socialAccounts["Ln"].getAccessToken({ Code: body.code });
             const user = await socialAccounts["Ln"].getUser( { Token: accessToken.Token } );
-            // DONE Save auth data in database table
+            // TODO : validate before save in database
+            
+            // DONE : Save auth data in database table
             const auth = {
                 id: user.id,
                 first_name: user.FirstName,

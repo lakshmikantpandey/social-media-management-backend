@@ -18,13 +18,15 @@ class UsersService {
     async createUser(body: IUserRegister) {
 
         // find user
-        const user = await this.findByUsername(body.username);
+        const user = await this.findByUsername(body.email);
         // check if user exists
         if(user) {
             throw new ConflictError('User already exists.');
         }
         // hash password
         body.password = PasswordUtil.hashPassword(body.password);
+        body.role = "creator";
+        body.username = body.email;
         // save user
         const newUser = await User.query().insert(body).castTo<IUser>();
         const { id, first_name, last_name, username, role, email } = newUser;
@@ -38,11 +40,11 @@ class UsersService {
             to: [ { Email: body.email, Name: body.first_name } ],
             subject: 'User Registration',
             html: compileFile(path.join(__dirname, '../views/emails/register.pug'))({
-                host: `${process.env.APP_HOST}:${process.env.APP_PORT}${process.env.API_V1}/verify-token?token=${token}`,
+                host: `${process.env.REDIRECT_VERIFY_TOKEN}?token=${token}`,
             })
         });
 
-        return { id, first_name, last_name, username, role, email };
+        return { id, first_name, last_name, username, role, email, link: `${process.env.REDIRECT_VERIFY_TOKEN}?token=${token}` };
     }
 
     async findByUsername(username: string): Promise<IUser> {
@@ -115,7 +117,7 @@ class UsersService {
 
     async getUserDetail(uid: number){
         const user = await User.query()
-            .select("id", "first_name", "last_name", "email", "role", "username")
+            .select("first_name", "last_name", "email", "role", "mobile")
             .findById(uid)
             .castTo<IUser>();
         if(!user) {

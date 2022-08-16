@@ -4,6 +4,7 @@ import SocialController from "./social.controller";
 import CampaignController from "./campaign.controller";
 import TeamsController from "./teams.controller";
 import UserChannelController from "./user-channel.controller";
+import CallbackController from "./callback.controller";
 
 export {
 	UsersController,
@@ -11,5 +12,6 @@ export {
 	SocialController,
 	CampaignController,
 	TeamsController,
-	UserChannelController
+	UserChannelController,
+	CallbackController
 };

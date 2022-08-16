@@ -13,10 +13,8 @@ export const validateSchema = {
     registerUser: z.object({
         body: z.object({
             first_name: z.string().min(2),
-            username: z.string().min(2),
             email: z.string().email(),
-            password: z.string().min(5),
-            role: z.string().min(1)
+            password: z.string().min(5)
         })
     }),
     verifyUserToken: z.object({
@@ -33,7 +31,6 @@ export const validateSchema = {
     userEdit: z.object({
         body: z.object({
             first_name: z.string().min(2),
-            mobile: z.string().min(1),
             last_name: z.string()
         })
     }),

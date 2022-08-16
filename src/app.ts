@@ -2,6 +2,8 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import routes from './routes'
 import { errorHandlerMiddleware } from './middlewares';
+import path from 'path';
+import callbackRouter from './routes/callback.router';
 
 const ENV: any = process.env;
 const app: Application = express();
@@ -11,6 +13,8 @@ app.use(cors());
 
 // views render
 app.set('view engine', 'pug');
+// static file link
+app.use(express.static(path.join(__dirname, 'public')));
 
 // router
 app.get('/', (req, res) => {
@@ -20,8 +24,10 @@ app.get('/', (req, res) => {
 	})
 });
 
-// open routes
+// social callbacks
+app.use(callbackRouter);
 
+// open routes
 routes.map(route => {
 	app.use(ENV.API_V1, route);
 });
