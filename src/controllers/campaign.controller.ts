@@ -1,5 +1,6 @@
 import { NextFunction } from "express";
 import { ICreateCampaign, ICreateCampaignBody, IEditCampaignBody, IRequest, IResponse } from "../interfaces";
+import { ICampaignResBody } from '../interfaces/campaign.interface';
 import { campaignService } from "../services";
 import { ConvertToSlug } from "../utils";
 import Controller from "./base.controller";
@@ -9,6 +10,14 @@ interface IDeleteCampaign {
 }
 
 class CampaignController extends Controller {
+
+    async getCampaigns(req: IRequest, res: IResponse<ICampaignResBody[]>) {
+        const campaigns = await campaignService.getCampaigns(req);
+        res.json({
+            message: "Campaigns",
+            data: campaigns
+        });
+    }
 
     async createCampaign(req: IRequest<ICreateCampaignBody>, res: IResponse<any>) {
         const body = req.body;

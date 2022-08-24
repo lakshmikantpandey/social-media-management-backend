@@ -11,7 +11,7 @@ class SocialController extends Controller {
             const { social_type } = req.query;
             res.json({
                 message: "Social Login",
-                data: await socialService.getSocialLogin(social_type, req.user?.id || 0)
+                data: await socialService.getSocialLogin(social_type, req.user?.id || "")
             });
         } catch (error) {
             next(error);
@@ -21,7 +21,9 @@ class SocialController extends Controller {
     // DONE : Linkedin verification pending
     async verifyLinkedin(req: IRequest<IVerifyLinkedin>, res: IResponse<any>, next: NextFunction) {
         try {
-            const linkedin = await socialService.verifyLinkedIn(req.body);
+            console.log("Logged in User: ", req.user?.id);
+            
+            const linkedin = await socialService.verifyLinkedIn(req.body, req.user?.id);
             res.json({
                 message: "Verify Linkedin",
                 data: linkedin

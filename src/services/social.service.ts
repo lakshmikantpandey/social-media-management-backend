@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { ref } from "objection";
 import config from "../config";
-import { NotFoundError, UnauthorizedError } from "../errors";
+import { ConflictError, NotFoundError, UnauthorizedError } from "../errors";
 import { IFacebookPages, IRequest, ISelectedFacebookPage, ISelectedFacebookPages, ISocialType, IVerifyFacebook, IVerifyLinkedin } from "../interfaces";
 import { Channel, UserChannel } from "../models";
 import { Base64 } from "../utils";
@@ -11,7 +11,7 @@ import { socialAccounts } from "./social_modules";
 
 class SocialService {
 
-    async getSocialLogin(social_type: string, State: number) {
+    async getSocialLogin(social_type: string, State: string) {
         // validation
         const channel = await Channel.query().where('slug', social_type).andWhere('is_active', true).first();
         if(!channel) {
@@ -31,13 +31,23 @@ class SocialService {
         return socialAccounts[social_type].getAuth({ State: state });
     }
 
-    async verifyLinkedIn(body:IVerifyLinkedin) {
+    private async _isLinkedinAlreadyLinked(linkedinId: string, userId: any) {
+        const linkedin = await UserChannel.query()
+                        .where(ref('user_auth:id').castText(), linkedinId)
+                        .andWhere('user_id', userId)
+                        .andWhere("is_active", true);
+        if(linkedin.length > 0){
+            throw new ConflictError("This account is already linked");
+        }
+    }
+
+    async verifyLinkedIn(body:IVerifyLinkedin, loggedInUser: any = "") {
         try {
             // get access token and user info
             const accessToken = await socialAccounts["Ln"].getAccessToken({ Code: body.code });
             const user = await socialAccounts["Ln"].getUser( { Token: accessToken.Token } );
-            // TODO : validate before save in database
-            
+            // DONE : validate before save in database
+            await this._isLinkedinAlreadyLinked(user.id, loggedInUser);
             // DONE : Save auth data in database table
             const auth = {
                 id: user.id,

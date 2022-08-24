@@ -4,6 +4,7 @@ import routes from './routes'
 import { errorHandlerMiddleware } from './middlewares';
 import path from 'path';
 import callbackRouter from './routes/callback.router';
+import timezoneRouter from "./routes/timezone.router";
 
 const ENV: any = process.env;
 const app: Application = express();
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 
 // social callbacks
 app.use(callbackRouter);
+app.use(ENV.API_V1, timezoneRouter);
 
 // open routes
 routes.map(route => {

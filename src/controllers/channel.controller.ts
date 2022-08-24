@@ -1,5 +1,6 @@
 import { NextFunction } from "express";
 import { IAssignChannel, IChannel, IRemoveChannel, IRequest, IResponse } from "../interfaces";
+import { IChannelPosting } from '../interfaces/channel.interface';
 import { channelService } from "../services";
 import Controller from "./base.controller";
 
@@ -49,6 +50,20 @@ class ChannelController extends Controller {
                 message: "OK",
                 data: channels
             });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    // DONE : get current channel posting time
+    async getPostingSchedule(req: IRequest, res: IResponse<any>, next: NextFunction) {
+        try {
+            const postingSchedule = await channelService.getPostingSchedule(req);
+            res.json({
+                message: "Posting Schedule",
+                data: postingSchedule
+            });
+            
         } catch (error) {
             next(error);
         }

@@ -1,5 +1,5 @@
 export interface IJwtToken {
-	id: number;
+	id: string;
 	first_name: string;
 	last_name?: string;
 	role: string;

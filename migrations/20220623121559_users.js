@@ -8,7 +8,7 @@ exports.up = function(knex) {
   return knex.schema.hasTable($table).then((exists) => {
 	if(!exists){
 		return knex.schema.createTable($table, function (table) {
-			table.bigIncrements("id").unsigned().primary();
+			table.uuid("id").defaultTo(knex.raw('gen_random_uuid()')).unique().primary();
 			table.bigInteger('parent_id').defaultTo(0);
 			table.string("first_name");
 			table.string("last_name").nullable();

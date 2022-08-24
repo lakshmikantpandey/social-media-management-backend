@@ -10,7 +10,8 @@
     "migrate": "yarn rollback && knex migrate:latest",
     "make:seed": "knex seed:make",
     "rollback": "knex migrate:rollback --all",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "killport": "kill-port --port 3002"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -19,6 +20,7 @@
     "@types/multer": "^1.4.7",
     "@types/node": "^18.0.0",
     "@types/pug": "^2.0.6",
+    "kill-port": "^2.0.1",
     "nodemon": "^2.0.16",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.4"

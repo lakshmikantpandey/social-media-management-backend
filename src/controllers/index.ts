@@ -5,6 +5,7 @@ import CampaignController from "./campaign.controller";
 import TeamsController from "./teams.controller";
 import UserChannelController from "./user-channel.controller";
 import CallbackController from "./callback.controller";
+import TimezoneController from "./timezone.controller";
 
 export {
 	UsersController,
@@ -13,5 +14,6 @@ export {
 	CampaignController,
 	TeamsController,
 	UserChannelController,
-	CallbackController
+	CallbackController,
+	TimezoneController
 };

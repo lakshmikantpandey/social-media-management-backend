@@ -31,7 +31,8 @@ export interface PasswordConfig {
 
 export interface ITimer {
 	days: string[];
-	times: string[]
+	times: string[];
+	is_active: boolean;
 }
 
 export interface IConfig {
@@ -97,27 +98,38 @@ const config: IConfig = {
 	schedules: [
 		{
 			days: ['mon'],
-			times: ['09:15', '17:05']
+			times: ['09:15', '17:05'],
+			is_active: true
 		},
 		{
 			days: ['tue'],
-			times: ['09:15', '17:05']
+			times: ['09:15', '17:05'],
+			is_active: true
 		},
 		{
 			days: ['wed'],
-			times: ['09:15', '17:05']
+			times: ['09:15', '17:05'],
+			is_active: true
 		},
 		{
 			days: ['thu'],
-			times: ['09:15', '17:05']
+			times: ['09:15', '17:05'],
+			is_active: true
 		},
 		{
 			days: ['fri'],
-			times: ['09:15', '17:05']
+			times: ['09:15', '17:05'],
+			is_active: true
 		},
 		{
 			days: ['sat'],
-			times: ['09:15', '17:05']
+			times: ['09:15', '17:05'],
+			is_active: true
+		},
+		{
+			days: ['sun'],
+			times: ['09:15', '17:05'],
+			is_active: true
 		},
 	],
 	permissions: ['sp_read']

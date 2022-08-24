@@ -51,15 +51,34 @@ class ChannelService {
                                 'channel_type',
                                 'id',
                                 ref('user_auth:first_name').castText().as("first_name"),
-                                ref('user_auth:last_name').castText().as("last_name"),
+                                ref('user_auth:last_name').castText().as("last_name")
                             )
                             .where("user_id", req.user?.id || 0)
                             .andWhere("is_active", true)
-                            .andWhere("deleted_at", null);
+                            .andWhere("deleted_at", null)
+                            .withGraphFetched('channel');
         const channels = channelList.map((channel: any) => {
-            return {...channel, image: channelSvg[channel?.channel_type] };
+            return {
+                id: channel.id,
+                channel_type: channel.channel_type,
+                first_name: channel.first_name,
+                last_name: channel.last_name,
+                image: channelSvg[channel?.channel_type],
+                channel: channel.channel.channel
+            };
         });
         return channels;
+    }
+
+    async getPostingSchedule(req: IRequest) {
+        const postingSchedule = await UserChannel.query()
+                                .where('id', req.params.id || 0)
+                                .andWhere('user_id', req.user?.id || 0).first().castTo<IUserChannel>();
+        const resBody = {
+            postingSchedule: postingSchedule?.schedules,
+            tz: postingSchedule.timezone
+        }
+        return resBody;        
     }
 
 }

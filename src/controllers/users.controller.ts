@@ -48,11 +48,13 @@ class UsersController extends Controller {
 
 	async userEdit(req: IRequest<IUserEdit>, res: IResponse<any>, next: NextFunction){
 		// edit user
-		await userService.editUser(req);
+		const user = await userService.editUser(req);
 		res.json({
 			message: 'User edited successfully!',
 			data: {
-				...req.body
+				...req.body,
+				role: user.role,
+				email: user.email
 			}
 		});
 	}
@@ -72,7 +74,7 @@ class UsersController extends Controller {
 		try {
 			res.json({
 				message: "User Detail",
-				data: await usersSrevice.getUserDetail(req.user?.id || 0)
+				data: await usersSrevice.getUserDetail(req.user?.id || "")
 			});
 		} catch (error) {
 			next(error);
