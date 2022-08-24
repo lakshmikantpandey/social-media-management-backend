@@ -1,6 +1,6 @@
 export interface ICampaign {
     id: number;
-    user_id?: number;
+    user_id?: string;
     campaign_name?: string;
     slug?: string;
     color: string;
@@ -8,6 +8,8 @@ export interface ICampaign {
     created_at?: Date| string;
     updated_at?: Date | string;
 }
+
+export type ICampaignResBody = Omit<ICampaign, "deleted_at" | "user_id">;
 
 export interface ICreateCampaignBody {
     name: string;

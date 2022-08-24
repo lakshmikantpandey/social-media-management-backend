@@ -8,8 +8,8 @@ exports.up = function(knex) {
   return knex.schema.hasTable($table).then((exists) => {
     if(!exists) {
         return knex.schema.createTable($table, (table) => {
-            table.bigIncrements('id').primary();
-            table.bigInteger('user_id').unsigned().notNullable();
+            table.uuid("id").defaultTo(knex.raw('gen_random_uuid()')).unique().primary();
+            table.uuid('user_id').unsigned().notNullable();
             table.string("campaign_name").notNullable();
             table.string("slug").notNullable();
             table.string("color", 15).notNullable();

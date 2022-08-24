@@ -1,9 +1,17 @@
 import { NotFoundError } from "../errors";
-import { ICampaign, ICreateCampaign } from "../interfaces";
+import { ICampaign, ICreateCampaign, IRequest } from "../interfaces";
+import { ICampaignResBody } from '../interfaces/campaign.interface';
 import { Campaign } from "../models";
 import { MomentTZ } from "../utils";
 
 class CampaignService {
+
+    async getCampaigns(req: IRequest) : Promise<ICampaignResBody[]> {
+        return await Campaign.query()
+            .select("id", "campaign_name", "slug", "color", "created_at", "updated_at")
+            .where('user_id', req.user?.id || 0)
+            .andWhere('deleted_at', null).castTo<ICampaignResBody[]>();
+    }
 
     async createCampaign(body: ICreateCampaign) : Promise<ICampaign> {
         try {
@@ -25,13 +33,11 @@ class CampaignService {
         try {
             // check campaign exists
             const campaign = await Campaign.query().findById(id).where('deleted_at', null).first();
-            console.log(campaign);
-            
             if(!campaign) {
                 throw new NotFoundError("Invalid Campaign");
             }
             await Campaign.query().findById(id).patch({
-                deleted_at: MomentTZ().format("YYYY-MM-DD")
+                deleted_at: new Date()
             });
         } catch (error) {
             throw error;

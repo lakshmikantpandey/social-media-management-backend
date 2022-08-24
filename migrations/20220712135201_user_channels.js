@@ -8,8 +8,8 @@ exports.up = function(knex) {
 	return knex.schema.hasTable($table).then((exists) => {
 		if(!exists){
 			return knex.schema.createTable($table, (table) => {
-				table.bigIncrements();
-				table.bigInteger('user_id').notNullable();
+				table.uuid("id").defaultTo(knex.raw('gen_random_uuid()')).unique().primary();
+				table.uuid('user_id').notNullable();
 				table.string('channel_type').notNullable();
 				table.json('user_auth').nullable();
 				table.json('permissions').nullable();

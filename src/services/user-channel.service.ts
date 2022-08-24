@@ -11,7 +11,7 @@ class UserChannelService {
         }).where('id', body.channel_id);
     }
 
-    // TODO: Update timezone
+    // DONE: Update timezone
     async updateTimezone(body: IUserChannelTimezone) {
         // update timezone
         await UserChannel.query().patch({

@@ -14,7 +14,7 @@ interface ISettings {
 
 export interface IUserChannel {
     id?: string;
-    user_id: number;
+    user_id: string;
     channel_type: string;
     settings: ISettings;
     expired_at?: Date | string;
@@ -41,4 +41,8 @@ export interface IUserChannelTimezone {
 export interface IUserChannelSchedules {
     channel_id: number;
     arg: string;
+}
+
+export interface IChannelPosting {
+    id: string;
 }

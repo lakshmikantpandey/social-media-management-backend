@@ -9,7 +9,7 @@ import emailService from "./email.service";
 
 class TeamService {
 
-    async inviteMember(body: IInviteMember & { parent_id?: number }) {
+    async inviteMember(body: IInviteMember & { parent_id?: string }) {
         // prepare create user body
         const registerUser: IUserRegister = {
             first_name: body.first_name,

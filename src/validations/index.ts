@@ -75,7 +75,7 @@ export const validateSchema = {
     }),
     editCampaign: z.object({
         body: z.object({
-            id: z.number().nonnegative(),
+            id: z.any(),
             name: z.string().min(1),
             color: z.string().min(1)
         })
@@ -105,13 +105,13 @@ export const validateSchema = {
     userChannelSchedules: z.object({
         body: z.object({
             arg: z.string().min(1),
-            channel_id: z.number().nonnegative()
+            channel_id: z.string().min(1)
         })
     }),
     userChannelTimezone: z.object({
         body: z.object({
             tz: z.string().min(1),
-            channel_id: z.number().nonnegative()
+            channel_id: z.string().min(1)
         })
     }),
     getPages: z.object({
@@ -123,6 +123,11 @@ export const validateSchema = {
         body: z.object({
             pageIndex: z.number().nonnegative(),
             userChannelId: z.number().nonnegative()
+        })
+    }),
+    postingSchedule: z.object({
+        params: z.object({
+            id: z.string().uuid()
         })
     }),
     formatErrors: (errors: ZodIssue[]) => {

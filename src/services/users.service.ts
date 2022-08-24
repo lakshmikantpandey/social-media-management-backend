@@ -11,7 +11,7 @@ import { IChangePassword } from "../interfaces/user.interface";
 
 class UsersService {
 
-    async findById(id: number): Promise<IUser> {
+    async findById(id: string): Promise<IUser> {
         return await User.query().where('id', id).first().castTo<IUser>();
     }
 
@@ -54,7 +54,7 @@ class UsersService {
     async verifyUser(req: IRequest) : Promise<IUser> {
         const decoded: IUserVerifyToken = await jwtHelper.verifyToken(req.query.token as string) as IUserVerifyToken;
         // get user detail
-        const user = await this.findById(decoded.id || 0) as IUser;
+        const user = await this.findById(decoded.id || "") as IUser;
         if(user.is_active) {
             throw new ConflictError("User already verified");
         }
@@ -83,7 +83,8 @@ class UsersService {
             firstName: user.first_name,
             lastName: user.last_name,
             role: user.role,
-            email: user.email            
+            email: user.email,
+            mobile: user.mobile
         };
         const token = jwtHelper.generateToken(userDetail).token;
         return {...userDetail, token};
@@ -91,17 +92,20 @@ class UsersService {
 
     async editUser(req: IRequest<IUserEdit>) {
         const body = req.body;
+        const user = await User.query().findById(req.user?.id || 0).first().castTo<IUser>();
         await User.query().findById(req.user?.id || 0).patch({
             first_name: body.first_name,
             last_name: body.last_name,
-            mobile: body.mobile
+            mobile: body.mobile,
+            role: user.role,
+            email: user.email
         });
-        return true;
+        return user;
     }
 
     async changePassword(req: IRequest<IChangePassword>) {
         const body = req.body;
-        const user = await this.findById(req.user?.id || 0) as IUser;
+        const user = await this.findById(req.user?.id || "") as IUser;
         // validate old password
         if (PasswordUtil.comparePassword(body.old_password, user.password)) {
             // change password
@@ -115,7 +119,7 @@ class UsersService {
         }
     }
 
-    async getUserDetail(uid: number){
+    async getUserDetail(uid: string){
         const user = await User.query()
             .select("first_name", "last_name", "email", "role", "mobile")
             .findById(uid)

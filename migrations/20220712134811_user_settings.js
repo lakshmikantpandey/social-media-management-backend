@@ -13,7 +13,7 @@ exports.up = function(knex) {
 				if (!exists) {
 					return knex.schema.createTable($table, (table) => {
 						table.bigIncrements();
-						table.bigInteger('user_id').notNullable();
+						table.uuid('user_id').notNullable();
 						table.json('settings').notNullable();
 						table.timestamps(true, true);
 					});
