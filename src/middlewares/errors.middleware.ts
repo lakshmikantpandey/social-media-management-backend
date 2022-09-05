@@ -3,6 +3,7 @@ import { BaseError, ValidationError } from '../errors';
 import multer from 'multer';
 import { HttpCode } from '../enums';
 import { logger } from '../logging';
+import { validateSchema } from '../validations';
 
 
 export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response, next: NextFunction) => {
@@ -15,8 +16,8 @@ export const errorHandlerMiddleware = (err: unknown, req: Request, res: Response
 	// Schema validation error.
 	if (err instanceof ValidationError) {
 		res.status(err.status).json({
-			message:err.message,
-			errors: err.errors
+			message: err.message,
+			errors: validateSchema.formatErrors(err.errors)
 		});
 
 	}else if (err instanceof multer.MulterError) {

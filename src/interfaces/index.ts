@@ -5,6 +5,8 @@ import { IChannel, IUserChannel, IAssignChannel, IRemoveChannel, IChannelState, 
 import { ISocialType, IVerifyLinkedin, IVerifyFacebook, IFacebookPages, ISelectedFacebookPage, ISelectedFacebookPages } from "./social.interface";
 import { ICampaign, ICreateCampaign, ICreateCampaignBody, IEditCampaignBody } from "./campaign.interface";
 import { IInviteMember, IVerifyMember } from "./teams.interface";
+import { IBucketFile } from "./image.interface";
+import { IEditPost } from "./posts.interface";
 
 export {
 	IRequest,
@@ -37,5 +39,7 @@ export {
 	IVerifyFacebook,
 	IFacebookPages,
 	ISelectedFacebookPage,
-	ISelectedFacebookPages
+	ISelectedFacebookPages,
+	IBucketFile,
+	IEditPost
 };

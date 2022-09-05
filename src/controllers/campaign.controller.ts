@@ -32,10 +32,7 @@ class CampaignController extends Controller {
         const campaign = await campaignService.createCampaign(campaignBody);
         res.json({
             message: "Campaign Created!",
-            data: {
-                id: campaign.id,
-                campaign_name: campaign.campaign_name
-            }
+            data: campaign
         });
     }
 

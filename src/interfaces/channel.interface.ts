@@ -17,6 +17,7 @@ export interface IUserChannel {
     user_id: string;
     channel_type: string;
     settings: ISettings;
+    user_auth?: string;
     expired_at?: Date | string;
     is_active: boolean;
     channel_token?: string;

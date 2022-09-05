@@ -3,11 +3,11 @@ import { compileFile } from "pug";
 import { ConflictError, NotFoundError, UnauthorizedError } from "../errors";
 // import { JwtHelper } from "../helpers";
 import { IUserRegister, IUser, IRequest, IUserVerifyToken, IUserLogin, IUserEdit } from "../interfaces";
-import { User } from "../models";
+import { User, UserSetting } from "../models";
 import { PasswordUtil } from "../utils";
 import { emailService } from ".";
 import { jwtHelper } from "../helpers";
-import { IChangePassword } from "../interfaces/user.interface";
+import { IChangePassword, IUserSettings } from "../interfaces/user.interface";
 
 class UsersService {
 
@@ -36,15 +36,28 @@ class UsersService {
             email: body.email
         });
 
+        // save users settings
+        const permissions: IUserSettings = {
+            admin_access: true
+        };
+        // save permission
+        await UserSetting.query().insert({
+            user_id: id,
+            settings: {
+                role,
+                permissions
+            }
+        });
+
+        const link = `${process.env.REDIRECT_VERIFY_TOKEN}?token=${token}`;
         emailService.sendEmail({
             to: [ { Email: body.email, Name: body.first_name } ],
             subject: 'User Registration',
             html: compileFile(path.join(__dirname, '../views/emails/register.pug'))({
-                host: `${process.env.REDIRECT_VERIFY_TOKEN}?token=${token}`,
+                host: link
             })
         });
-
-        return { id, first_name, last_name, username, role, email, link: `${process.env.REDIRECT_VERIFY_TOKEN}?token=${token}` };
+        return { id, first_name, last_name, username, role, email };
     }
 
     async findByUsername(username: string): Promise<IUser> {
