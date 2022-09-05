@@ -1,3 +1,5 @@
+import { ACCESS_LEVEL } from '../enums/access_level.enum';
+
 export interface IUser {
 	id?: string;
 	parent_id?: string;
@@ -34,4 +36,14 @@ export interface IForgetPassword {
 
 export interface IUserSchedules {
 	arg: string;
+}
+
+export interface IChannelPermission {
+	channel?: string;
+	access_level?: ACCESS_LEVEL
+}
+
+export interface IUserSettings {
+	admin_access: boolean;
+	channel?: IChannelPermission[];
 }

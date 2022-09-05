@@ -35,6 +35,13 @@ export interface ITimer {
 	is_active: boolean;
 }
 
+export interface ISpacesConfig {
+	key: string;
+	secret: string;
+	bucket: string;
+	region: string;
+}
+
 export interface IConfig {
   env: string;
   app: {
@@ -52,6 +59,7 @@ export interface IConfig {
   tz: string;
   schedules?: ITimer[];
   permissions?: string[];
+  doConfig: ISpacesConfig;
 }
 
 // use this snippet to create a config file from env variables
@@ -132,7 +140,13 @@ const config: IConfig = {
 			is_active: true
 		},
 	],
-	permissions: ['sp_read']
+	permissions: ['sp_read'],
+	doConfig: {
+		key: env.AWS_ACCESS_KEY_ID || '',
+		secret: env.AWS_SECRET_ACCESS_KEY || '',
+		region: env.SPACES_REGION || '',
+		bucket: env.SPACES_BUCKET || ''
+	}
 };
 
 export default config;

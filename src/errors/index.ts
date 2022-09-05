@@ -50,3 +50,10 @@ export class InvalidFileTypeError extends BaseError {
 		super(msg,status);
 	}
 }
+
+export class NoContentError extends BaseError {
+	type:string="No Content";
+	constructor(msg: string, public status: number = HttpCode.NoContent){
+		super(msg,status);
+	}
+}

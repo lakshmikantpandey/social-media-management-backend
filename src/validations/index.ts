@@ -2,6 +2,8 @@ import { number, z, ZodIssue } from "zod";
 
 const ROLES = ["creator", "sub-creator"] as const;
 
+
+
 export const validateSchema = {
     createUser: () => z.object({
         first_name: z.string().min(2),
@@ -130,7 +132,41 @@ export const validateSchema = {
             id: z.string().uuid()
         })
     }),
+    createPost: z.object({
+        body: z.object({
+            post_images: z.array(z.object({
+                file_path: z.string().min(1),
+                file_type: z.string().min(1)
+            })).nonempty(),
+            post_description : z.string().min(1),
+            post_date: z.string().min(1),
+            is_draft: z.boolean(),
+            hashtag: z.array(z.string().min(1)),
+            channel_id: z.array(z.string().uuid()),
+            campaign_id: z.string().uuid().optional()
+        })
+    }),
+    editPost: z.object({
+        body: z.object({
+            post_id: z.string().uuid(),
+            post_images: z.array(z.object({
+                file_path: z.string().min(1),
+                file_type: z.string().min(1)
+            })).nonempty(),
+            post_description : z.string().min(1),
+            post_date: z.string().min(1),
+            is_draft: z.boolean(),
+            hashtag: z.array(z.string().min(1)),
+            channel_id: z.array(z.string().uuid()),
+            campaign_id: z.string().uuid().optional()
+        })
+    }),
+    deletePost: z.object({
+        params: z.object({
+            post_id: z.string().uuid()
+        })
+    }),
     formatErrors: (errors: ZodIssue[]) => {
-        return errors.map((error) => `${error.path[0]} - ${error.message}`);
+        return errors.map((error) => `${error.path[1]} - ${error.message}`);
     }
 };

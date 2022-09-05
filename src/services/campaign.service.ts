@@ -15,7 +15,7 @@ class CampaignService {
 
     async createCampaign(body: ICreateCampaign) : Promise<ICampaign> {
         try {
-            return await Campaign.query().insert(body).castTo<ICampaign>();            
+            return await Campaign.query().insert(body).castTo<ICampaign>();
         } catch (error) {
             throw error;
         }
@@ -42,6 +42,10 @@ class CampaignService {
         } catch (error) {
             throw error;
         }
+    }
+
+    async getCampaignById(campaign_id: string) : Promise<ICampaign> {
+        return await Campaign.query().where("id", campaign_id).first().castTo<ICampaign>();
     }
 
 }
