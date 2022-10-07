@@ -134,7 +134,7 @@ export const validateSchema = {
     }),
     createPost: z.object({
         body: z.object({
-            post_images: z.array(z.object({
+            post_files: z.array(z.object({
                 file_path: z.string().min(1),
                 file_type: z.string().min(1)
             })).nonempty(),
@@ -164,6 +164,15 @@ export const validateSchema = {
     deletePost: z.object({
         params: z.object({
             post_id: z.string().uuid()
+        }),
+        query: z.object({
+            is_draft: z.boolean().optional(),
+            published: z.boolean().optional()
+        })
+    }),
+    getPostByChannel: z.object({
+        params: z.object({
+            channel_id: z.string().uuid()
         })
     }),
     formatErrors: (errors: ZodIssue[]) => {

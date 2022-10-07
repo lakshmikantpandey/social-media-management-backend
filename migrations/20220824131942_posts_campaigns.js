@@ -11,6 +11,8 @@ exports.up = function(knex) {
 				table.uuid("post_id").notNullable();
 				table.uuid("campaign_id").nullable();
 				table.timestamps(true, true);
+				// index
+				table.index(["post_id", "campaign_id"], "campaigns_index");
 			});
 		}
 	});

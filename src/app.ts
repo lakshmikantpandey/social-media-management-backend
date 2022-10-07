@@ -1,10 +1,13 @@
 import express, { Application } from 'express';
 import cors from 'cors';
+import { attachPaginate } from "knex-paginate";
 import routes from './routes'
 import { errorHandlerMiddleware } from './middlewares';
 import path from 'path';
 import callbackRouter from './routes/callback.router';
 import timezoneRouter from "./routes/timezone.router";
+
+attachPaginate();
 
 const ENV: any = process.env;
 const app: Application = express();

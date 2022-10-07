@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings, RelationMappingsThunk } from 'objection';
 import { BaseModel } from "./base.model";
 
 export class PostCampaign extends BaseModel {
@@ -21,15 +21,6 @@ export class Post extends BaseModel {
 	static idColumn = 'id';
 
 	static relationMappings = {
-        files : {
-            relation: Model.HasManyRelation,
-            modelClass: PostFile,
-            filter: (query:any) => query.select('id','post_id','file_path','file_type'),
-            join: {
-                from: 'posts.id',
-                to: 'posts_files.post_id'
-            }
-        },
 		campaign : {
             relation: Model.HasOneRelation,
             modelClass: PostCampaign,

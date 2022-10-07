@@ -16,6 +16,9 @@ exports.up = function(knex) {
 						table.uuid('user_id').notNullable();
 						table.json('settings').notNullable();
 						table.timestamps(true, true);
+
+						// index
+						table.index(["user_id"], "users_settings_index");
 					});
 				}
 			});

@@ -11,11 +11,15 @@ exports.up = function(knex) {
 				table.uuid("user_id").notNullable();
 				table.string("post_description").notNullable();
 				table.json("hashtag").nullable();
+				table.json("post_files").nullable();
 				table.boolean("is_draft").defaultTo(false);
 				table.boolean("is_active").defaultTo(true);
 				table.boolean("is_approved").defaultTo(false);
+				table.dateTime("publish_at").nullable().defaultTo(null);
 				table.dateTime('deleted_at').nullable().defaultTo(null);
 				table.timestamps(true, true);
+				// index
+				table.index(["user_id", "is_active", "is_approved", "publish_at", "is_draft"], "posts_index");
 			});
 		}		
 	});
@@ -28,6 +32,5 @@ exports.up = function(knex) {
 exports.down = function(knex) {
 	return knex.schema.dropTableIfExists("posts_campaigns")
 			.dropTableIfExists("post_channels_map")
-			.dropTableIfExists("post_files")
 			.dropTableIfExists($table);
 };

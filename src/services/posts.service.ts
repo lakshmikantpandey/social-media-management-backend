@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { ConflictError, NoContentError, NotFoundError } from '../errors';
-import { ICreatePost, IEditPost, IPost } from '../interfaces/posts.interface';
+import { IRequest } from '../interfaces';
+import { ICreatePost, IEditPost, IGetPostByChannel, IGetPostByChannelFilter, IPost, ISearchPosts } from '../interfaces/posts.interface';
 import { UserChannel } from '../models';
 import { Post, PostCampaign, PostChannelMap, PostFile } from '../models/post.model';
 import postCampaignService from './post-campaign.service';
@@ -8,23 +9,17 @@ import postCampaignService from './post-campaign.service';
 class PostService {
 	async createPost(body: ICreatePost) {
 		try {
-			const post_images = [...body.post_images || []];
 			const campaignId = body.campaign_id;
 			const selectedChannels = body.channel_id;
 			const post_date = body.post_date;
-			delete body.post_images;
 			delete body.campaign_id;
 			delete body.channel_id;
 			delete body.post_date;
 			// create post			
-			const post : any = await Post.transaction(async trx => {
+			const post: any = await Post.transaction(async trx => {
 				const postCreated = await Post.query(trx).insert(body);
-				// save posts files map
-				await postCreated
-					.$relatedQuery('files', trx)
-					.insert(post_images);
 				// campaign creation
-				if(campaignId !== undefined) {
+				if (campaignId !== undefined) {
 					await postCreated
 						.$relatedQuery('campaign', trx)
 						.insert({
@@ -32,9 +27,9 @@ class PostService {
 						});
 				}
 				const channelsDetails = await UserChannel
-									.query()
-									.select(...["id", "timezone"])
-									.where("id", "in", selectedChannels || []).castTo<{id: string, timezone: string}[]>();
+					.query()
+					.select(...["id", "timezone"])
+					.where("id", "in", selectedChannels || []).castTo<{ id: string, timezone: string }[]>();
 
 				const postChannelMap = channelsDetails.map((channel) => {
 					return {
@@ -55,10 +50,8 @@ class PostService {
 
 	async editPost(body: IEditPost) {
 		try {
-			const post_images = [...body.post_images || []];
 			const campaignId = body.campaign_id;
 			const selectedChannels = body.channel_id;
-			delete body.post_images;
 			delete body.campaign_id;
 			delete body.channel_id;
 
@@ -77,11 +70,10 @@ class PostService {
 			await post?.$relatedQuery("channel_map").delete();
 
 			// update values
-			await post?.$relatedQuery('files').insert(post_images);
 			const channelsDetails = await UserChannel
-									.query()
-									.select(...["id", "timezone"])
-									.where("id", "in", selectedChannels || []).castTo<{id: string, timezone: string}[]>();
+				.query()
+				.select(...["id", "timezone"])
+				.where("id", "in", selectedChannels || []).castTo<{ id: string, timezone: string }[]>();
 			const postChannelMap = channelsDetails.map((channel) => {
 				return {
 					channel_id: channel.id,
@@ -90,7 +82,7 @@ class PostService {
 			});
 			await post?.$relatedQuery('channel_map').insert(postChannelMap);
 			// campaign creation
-			if(campaignId !== undefined) {
+			if (campaignId !== undefined) {
 				await post?.$relatedQuery('campaign')
 					.insert({
 						campaign_id: campaignId
@@ -102,19 +94,32 @@ class PostService {
 		}
 	}
 
-	// TODO: get connected posts
-	async getAllPosts() {
-		return await PostChannelMap.query();
+	// DONE: get search posts
+	async getAllPosts(req: IRequest<any, any, ISearchPosts>) {
+		const search = req.query;
+		const postKnex = PostChannelMap.knex();
+		return await postKnex.table('post_channels_map as pcm')
+			.columns(["pcm.post_id as id", "pcm.post_date", "pcm.channel_id", "pcm.timezone", "p.user_id", "p.post_description", "p.hashtag"])
+			.innerJoin(
+				"posts as p",
+				"pcm.post_id",
+				"=",
+				"p.id"
+			).where("p.user_id", req.user?.id)
+			.andWhere("p.deleted_at", null)
+			.andWhere("p.is_draft", false)
+			.andWhere("p.publish_at", null)
+			.andWhereBetween("pcm.post_date", [search.start, search.end]);
 	}
 
 	// delete posts
 	async deletePost(post_id: string) {
 		const post = await Post.query().findById(post_id).castTo<IPost>();
-		if(!post) {
+		if (!post) {
 			throw new NotFoundError("Invalid post");
 		}
 		// check if already deleted
-		if(post.deleted_at != null) {
+		if (post.deleted_at != null) {
 			throw new NoContentError("Post already deleted");
 		}
 		// delete post
@@ -122,6 +127,37 @@ class PostService {
 			deleted_at: moment().utc()
 		}).where("id", post_id);
 	}
+
+	async getPostsByChannel(req: IRequest<any, IGetPostByChannel, IGetPostByChannelFilter>) {
+		const postKnex = PostChannelMap.knex();
+		const query = req.query;
+		
+		let posts = postKnex.table('post_channels_map as pcm')
+			.columns(["pcm.post_id as id", "pcm.post_date", "pcm.channel_id", "pcm.timezone", "p.user_id", "p.post_description", "p.hashtag"])
+			.innerJoin(
+				"posts as p",
+				"pcm.post_id",
+				"=",
+				"p.id"
+			).where("p.user_id", req.user?.id)
+			.andWhere("pcm.channel_id", req.params.channel_id)
+			.andWhere("p.deleted_at", null)
+			.andWhere("p.is_draft", query.is_draft == "true");
+
+		if(query.published == "true") {
+			posts = posts.whereNotNull("p.publish_at");
+		} else {
+			posts = posts.where("p.publish_at", null);
+		}
+		return await posts.paginate({
+			currentPage: query.page || 0,
+			perPage: 10
+		});
+	}
 }
 
-export default new PostService;
+const postService = new PostService()
+
+export {
+	postService
+};

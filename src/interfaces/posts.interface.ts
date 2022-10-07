@@ -12,7 +12,7 @@ export interface ICreatePost {
 	is_draft: boolean;
 	is_apprived?: boolean;
 	hashtag: string;
-	post_images?: PostImage[];
+	post_files?: PostImage[] | string;
 	user_id?: string;
 	campaign_id?: string;
 }
@@ -35,6 +35,21 @@ export interface IPostCampaign {
 	created_at?: Date;
 	updated_at?: Date;
 	deleted_at?: Date;
+}
+
+export interface ISearchPosts {
+	start: Date | string;
+	end: Date | string;
+}
+
+export interface IGetPostByChannel {
+	channel_id?: string;
+}
+
+export interface IGetPostByChannelFilter {
+	is_draft?: boolean | string;
+	published?: boolean | string;
+	page?: number;
 }
 
 export type IPostCampaignBody = Omit<IPostCampaign, "created_at" | "updated_at" | "deleted_at" | "id">;

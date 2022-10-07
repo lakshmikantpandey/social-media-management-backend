@@ -13,6 +13,8 @@ exports.up = function(knex) {
 				table.string('image').nullable();
 				table.boolean('is_active').defaultTo(true);
 				table.timestamps(true, true);
+				// index
+				table.index(["slug", "is_active"], "channels_index");
 			});
 		}
 	});

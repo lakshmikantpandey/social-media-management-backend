@@ -20,6 +20,8 @@ exports.up = function(knex) {
 				table.string('channel_token').nullable();
 				table.dateTime('deleted_at').nullable().defaultTo(null);
 				table.timestamps(true, true);
+				// index
+				table.index(["user_id", "is_active", "expired_at"], "users_channel_index");
 			});
 		}
 	});

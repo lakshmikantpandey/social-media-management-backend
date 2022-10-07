@@ -19,6 +19,9 @@ exports.up = function(knex) {
 				// foreign relation
 				table.foreign("channel_id").references("user_channels.id");
 				table.foreign("post_id").references("posts.id");
+
+				// index
+				table.index(["post_id", "channel_id"], "posts_channel_map");
 			});
 		}		
 	});

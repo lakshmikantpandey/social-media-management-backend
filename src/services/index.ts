@@ -6,7 +6,7 @@ import campaignService from "./campaign.service";
 import teamsService from "./teams.service";
 import userSettingService from "./user-settings.service";
 import userChannelService from "./user-channel.service";
-import postService from "./posts.service";
+import { postService } from "./posts.service";
 import postCampaignService from './post-campaign.service';
 
 export {

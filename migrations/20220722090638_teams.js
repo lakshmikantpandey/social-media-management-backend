@@ -15,6 +15,8 @@ exports.up = function(knex) {
             table.timestamps(true, true);
             // relations
             table.foreign("user_id").references("users.id");
+            // index
+    				table.index(["user_id"], "teams_index");
         });
     }
   });
