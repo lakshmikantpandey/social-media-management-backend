@@ -6,6 +6,8 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { nanoid } from 'nanoid';
 import path from 'path';
 
+const fileSize = 50 * 1024 * 1024;
+
 const s3 = new S3Client({
 	region: config.doConfig.region,
 	endpoint: 'https://sgp1.digitaloceanspaces.com',
@@ -34,11 +36,11 @@ export const uploadImages = multer({
 		const ext = path.extname(file.originalname);
 		const exts = ['.png', '.jpg', '.jpeg', '.gif', '.mp4', '.mov', '.avi', '.m4v'];
 		if(exts.indexOf(ext) === -1) {
-            return cb(new Error(`Only (${exts.toString()}) images are allowed`));
+            return cb(new Error(`Only (${exts.toString()}) files are allowed`));
         }
 		cb(null, true);
 	},
 	limits: {
-		fileSize: 5 * 1024 * 1024
+		fileSize
 	}
 });

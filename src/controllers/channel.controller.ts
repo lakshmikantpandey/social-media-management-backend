@@ -6,6 +6,14 @@ import Controller from "./base.controller";
 
 class ChannelController extends Controller {
     
+    async getChannel(req: IRequest, res: IResponse<any>) {
+        const channel = await channelService.getChannel(req.params.id)
+        res.json({
+            data: channel,
+            message: "Channel Detail"
+        });
+    }
+    
     async getChannels(req: IRequest, res: IResponse<IChannel[]>) {
         const channels = await channelService.getChannels();
         res.json({

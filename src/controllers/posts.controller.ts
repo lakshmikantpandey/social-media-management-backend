@@ -9,10 +9,24 @@ import { ConflictError, NotFoundError } from '../errors';
 import { campaignService, postService, userChannelService } from "../services";
 import { ICreatePost, IEditPost, IGetPostByChannel, IGetPostByChannelFilter, ISearchPosts } from '../interfaces/posts.interface';
 import { Post } from '../models';
+import { socialAccounts } from '../services/social_modules';
+import { ICampaignPostDeleteBody } from '../interfaces/campaign.interface';
 
 export const uploadImage = uploadImages.array('upload_files', 5);
 
 class PostsController extends Controller {
+
+	async getPostDetail(req: IRequest<any>, res: IResponse<any>, next: NextFunction) {
+		try {
+			const postDetail = await postService.getPostById(req);
+			res.json({
+				message: "Post",
+				data: postDetail
+			})
+		} catch (error) {
+			next(error);
+		}
+	}
 
 	async getAllPosts(req: IRequest<any, any, ISearchPosts>, res: IResponse<any>, next: NextFunction) {
 		try {
@@ -44,6 +58,7 @@ class PostsController extends Controller {
 			// check if id exists in connected channels
 			const channels = connectedChannel.map(channel => channel.id);
 			let isValidChannel: boolean = true;
+			// post date validation
 			for (const channel of body.channel_id || []) {
 				if (channels.indexOf(<string>channel) == -1) {
 					isValidChannel = false;
@@ -53,19 +68,22 @@ class PostsController extends Controller {
 			if (!isValidChannel) {
 				throw new NotFoundError("Invalid channel is trying to connect");
 			}
-
 			if (body.campaign_id !== undefined) {
 				const campaign = await campaignService.getCampaignById(body.campaign_id || "");
 				if (campaign?.deleted_at != null || campaign == undefined) {
 					throw new NotFoundError("Invalid selected campaign");
 				}
 			}
-
 			// create posts
 			body.hashtag = JSON.stringify(body.hashtag);
 			body.post_files = JSON.stringify(body.post_files);
 			body.user_id = req.user?.id;
+			body.is_draft = body.is_draft;
 			const post = await postService.createPost(body);
+			// share post
+			// if(!body.is_scheduled){
+			// 	postService.sharePost(body);
+			// }
 			res.json({
 				message: "Post created successfully!",
 				data: post
@@ -109,11 +127,11 @@ class PostsController extends Controller {
 
 	async deletePost(req: IRequest<any, { post_id: string }, any>, res: IResponse<any>, next: NextFunction) {
 		try {
-			const postId = req.params.post_id;
 			// check if post available
-			await postService.deletePost(postId);
+			await postService.deletePost(req.params.post_id);
 			res.json({
-				message: "Post deleted successfully!"
+				message: "Post deleted successfully!",
+				data: req.params.post_id
 			});
 		} catch (error) {
 			next(error);
@@ -127,8 +145,9 @@ class PostsController extends Controller {
 				throw new NotFoundError("No file selected.");
 			}
 			const post_images = files.map((file) => {
+				const imagePath: string = file.location;
 				return {
-					file_path: file.location,
+					file_path: imagePath.indexOf('https://') == -1 ? `https://${imagePath}` : imagePath,
 					file_type: file.mimetype.split('/')[0]
 				};
 			});
@@ -151,14 +170,50 @@ class PostsController extends Controller {
 						return {
 							id: post.id,
 							post_date: moment(post.post_date).tz(post.timezone).format("YYYY-MM-DD HH:mm"),
-							timezone: post.timezone,
-							post_description: post.post_description,
-							channel_id: post.channel_id
+							post_description: post.post_description,							
+							hashtag: post.hashtag,
+							is_active: post.is_active,
+							is_draft: post.is_draft,
+							is_approved: post.is_approved,
+							campaign_id: post.campaign_id,
+							channels: [
+								{
+									id: post.channel_id,
+									channel: post.channel_type,
+									image: `${process.env.IMAGE_URL}icons/${post.image}`,
+									timezone: post.timezone,
+								}
+							]
 						};
 					}),
 					paginate: posts.pagination
 				}
 			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async getPostByCampaign(req: IRequest<any>, res: IResponse<any>, next: NextFunction) {
+		try {
+			const campaignPosts = await postService.getPostByCampaign(req);
+			res.json({
+				message:"Posts",
+				data: campaignPosts
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	async deleteCampaignPosts(req: IRequest<any, any, any>, res: IResponse<any>, next: NextFunction) {
+		try {
+			const postData = req.params as ICampaignPostDeleteBody;
+			const deletedPost = await postService.campaignPostDelete(postData);
+			res.json({
+				message: "Posts Deleted Successfully!",
+				data: postData
+			})
 		} catch (error) {
 			next(error);
 		}

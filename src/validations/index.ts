@@ -141,6 +141,7 @@ export const validateSchema = {
             post_description : z.string().min(1),
             post_date: z.string().min(1),
             is_draft: z.boolean(),
+            is_scheduled: z.boolean().default(false),
             hashtag: z.array(z.string().min(1)),
             channel_id: z.array(z.string().uuid()),
             campaign_id: z.string().uuid().optional()
@@ -149,7 +150,7 @@ export const validateSchema = {
     editPost: z.object({
         body: z.object({
             post_id: z.string().uuid(),
-            post_images: z.array(z.object({
+            post_files: z.array(z.object({
                 file_path: z.string().min(1),
                 file_type: z.string().min(1)
             })).nonempty(),
@@ -170,9 +171,20 @@ export const validateSchema = {
             published: z.boolean().optional()
         })
     }),
+    campaignPostDelete: z.object({
+        params: z.object({
+            post_id: z.string().uuid(),
+            campaign_id: z.string().uuid()
+        })
+    }),
     getPostByChannel: z.object({
         params: z.object({
             channel_id: z.string().uuid()
+        })
+    }),
+    getPostByCampaign: z.object({
+        params: z.object({
+            campaign_id: z.string().uuid()
         })
     }),
     formatErrors: (errors: ZodIssue[]) => {

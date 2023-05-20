@@ -21,3 +21,9 @@ export interface IEditCampaignBody extends ICreateCampaignBody {
 }
 
 export type ICreateCampaign = Pick<ICampaign, "color" | "slug" | "user_id" | "campaign_name">;
+
+
+export interface ICampaignPostDeleteBody {
+    campaign_id: string;
+    post_id: string;
+}

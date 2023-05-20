@@ -17,7 +17,6 @@ const LinkedinService = new Linkedin({
 });
 
 const InstagramService = new Instagram({
-
     ClientId:ENV.INSTAGRAM_CLIENT_ID,
     ClientSecret:ENV.INSTAGRAM_CLIENT_SECRET,
     AccessTokenURL: ENV.INSTAGRAM_ACCESS_TOKEN,
@@ -26,13 +25,11 @@ const InstagramService = new Instagram({
 });
 
 const FacebookService = new Facebook({
-
     ClientId:ENV.FACEBOOK_CLIENT_ID,
     ClientSecret:ENV.FACEBOOK_CLIENT_SECRET,
     AccessTokenURL:ENV.FACEBOOK_ACCESS_TOKEN ,
     OnAuthCallbackURL: ENV.FACEBOOK_CALLBACK,
-    AuthURL:ENV.FACEBOOK_AUTH
-    
+    AuthURL:ENV.FACEBOOK_AUTH,
 });
 
 // const TwitterService = new Twitter(

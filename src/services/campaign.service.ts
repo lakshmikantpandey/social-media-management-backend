@@ -7,10 +7,11 @@ import { MomentTZ } from "../utils";
 class CampaignService {
 
     async getCampaigns(req: IRequest) : Promise<ICampaignResBody[]> {
-        return await Campaign.query()
-            .select("id", "campaign_name", "slug", "color", "created_at", "updated_at")
-            .where('user_id', req.user?.id || 0)
-            .andWhere('deleted_at', null).castTo<ICampaignResBody[]>();
+        const campaign = Campaign.knex();
+        const sql = `SELECT c.id, c.campaign_name, c.color, c.created_at, c.slug, count(pcm.post_id) scheduled_post from campaigns c LEFT JOIN posts_campaigns pc ON c.id = pc.campaign_id LEFT JOIN post_channels_map pcm ON pc.post_id = pcm.post_id AND pcm.post_date > NOW() AND c.user_id = '${req.user?.id}' AND c.deleted_at is null AND pcm.deleted_at is null group by c.id`;
+        // const sql = `select c.id, c.campaign_name, c.slug, c.color,c.created_at,c.updated_at, count(p.id) as scheduled_post from campaigns c left join posts_campaigns pc on c.id = pc.campaign_id left join posts p on pc.post_id = p.id where p.publish_at is null and p.deleted_at is null and c.user_id = '${req.user?.id}' and c.deleted_at is null group by pc.campaign_id, c.id;`
+        const campaigns = await campaign.raw(sql);
+        return campaigns.rows;
     }
 
     async createCampaign(body: ICreateCampaign) : Promise<ICampaign> {

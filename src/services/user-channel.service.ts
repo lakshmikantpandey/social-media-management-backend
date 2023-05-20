@@ -1,3 +1,4 @@
+import { raw } from "objection";
 import { IUserChannel, IUserChannelPermissions, IUserChannelSchedules, IUserChannelTimezone } from "../interfaces";
 import { UserChannel } from "../models";
 
@@ -26,6 +27,7 @@ class UserChannelService {
             .where("user_id", user_id)
             .andWhere("is_active", true)
             .andWhere("deleted_at", null)
+            .andWhere("expired_at", ">", raw(`now()::date`))
             .castTo<IUserChannel[]>();
     }
 

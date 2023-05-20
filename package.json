@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon ./src/main.ts",
     "make:migration": "knex migrate:make",
-    "migrate": "yarn rollback && knex migrate:latest",
+    "migrate": "yarn rollback && knex migrate:latest && yarn seed",
     "make:seed": "knex seed:make",
     "rollback": "knex migrate:rollback --all",
     "seed": "knex seed:run",

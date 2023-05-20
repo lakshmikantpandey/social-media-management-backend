@@ -6,6 +6,7 @@ import { validateSchema } from "../validations";
 const channelRoute = Router();
 
 channelRoute.get('/channels', jwtMiddleware ,ChannelController.getChannels);
+channelRoute.get('/channel/:id', jwtMiddleware ,ChannelController.getChannel);
 channelRoute.post('/channels/assign-channel', [ validSchema(validateSchema.assignChannel) ,jwtMiddleware] , ChannelController.assignChannel);
 channelRoute.delete('/channels/remove-channel/:id', [ validSchema(validateSchema.removeChannel) ,jwtMiddleware] , ChannelController.removeChannel);
 channelRoute.get('/channels/get-authenticated-channels', jwtMiddleware ,ChannelController.getAuthChennels);

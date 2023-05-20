@@ -11,10 +11,10 @@ export class UserChannel extends BaseModel {
     static idColumn = "id";
 
     static relationMappings = {
-        channel : {
+        channel: {
             relation: Model.BelongsToOneRelation,
             modelClass: Channel,
-            filter: (query:any) => query.select('id','channel','slug','image'),
+            filter: (query: any) => query.select('id', 'channel', 'slug', 'image'),
             join: {
                 from: 'user_channels.channel_type',
                 to: 'channels.slug'

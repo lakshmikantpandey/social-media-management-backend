@@ -15,6 +15,7 @@ export interface ICreatePost {
 	post_files?: PostImage[] | string;
 	user_id?: string;
 	campaign_id?: string;
+	is_scheduled?: boolean;
 }
 
 export interface IEditPost extends ICreatePost {

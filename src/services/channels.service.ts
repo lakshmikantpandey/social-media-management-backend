@@ -8,6 +8,15 @@ import channelSvg from '../utils/channel.util';
 
 class ChannelService {
 
+    async getChannel(id: string) {
+        return await UserChannel
+            .query()
+            .select(['id','channel_type','permissions','schedules', 'timezone'])
+            .findById(id)
+            .where('deleted_at', null)
+            .first();
+    }
+
     async getChannels() {
         return await Channel.query()
             .select("id", "channel", "slug", "image")
@@ -51,7 +60,8 @@ class ChannelService {
                                 'channel_type',
                                 'id',
                                 ref('user_auth:first_name').castText().as("first_name"),
-                                ref('user_auth:last_name').castText().as("last_name")
+                                ref('user_auth:last_name').castText().as("last_name"),
+                                'timezone'
                             )
                             .where("user_id", req.user?.id || 0)
                             .andWhere("is_active", true)
@@ -64,7 +74,8 @@ class ChannelService {
                 first_name: channel.first_name,
                 last_name: channel.last_name,
                 image: channelSvg[channel?.channel_type],
-                channel: channel.channel.channel
+                channel: channel.channel.channel,
+                tz: channel.timezone
             };
         });
         return channels;

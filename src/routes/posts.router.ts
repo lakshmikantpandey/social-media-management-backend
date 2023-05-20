@@ -4,12 +4,16 @@ import { jwtMiddleware, validSchema } from '../middlewares';
 import { validateSchema } from '../validations';
 
 const postRouter = Router();
+postRouter.use(jwtMiddleware);
 
-postRouter.get("/posts", [jwtMiddleware], postsController.getAllPosts);
-postRouter.post("/posts", [jwtMiddleware, validSchema(validateSchema.createPost)], postsController.createPost);
-postRouter.put("/posts", [jwtMiddleware, validSchema(validateSchema.editPost)], postsController.editPost);
-postRouter.delete("/posts/:post_id", [jwtMiddleware, validSchema(validateSchema.deletePost)], postsController.deletePost);
-postRouter.get("/posts/channel/:channel_id", [jwtMiddleware, validSchema(validateSchema.getPostByChannel)], postsController.getPostsByChannel);
-postRouter.post("/posts/upload-files", [jwtMiddleware, uploadImage], postsController.uplaodFiles);
+postRouter.get("/posts", postsController.getAllPosts);
+postRouter.get("/posts/:id", postsController.getPostDetail);
+postRouter.post("/posts", [validSchema(validateSchema.createPost)], postsController.createPost);
+postRouter.put("/posts", [validSchema(validateSchema.editPost)], postsController.editPost);
+postRouter.delete("/posts/:post_id", [validSchema(validateSchema.deletePost)], postsController.deletePost);
+postRouter.delete("/campaign-post/:campaign_id/:post_id", [ validSchema(validateSchema.campaignPostDelete) ], postsController.deleteCampaignPosts);
+postRouter.get("/posts/channel/:channel_id", [validSchema(validateSchema.getPostByChannel)], postsController.getPostsByChannel);
+postRouter.get("/posts/campaign/:campaign_id", [validSchema(validateSchema.getPostByCampaign)], postsController.getPostByCampaign);
+postRouter.post("/posts/upload-files", [uploadImage], postsController.uplaodFiles);
 
 export default postRouter;
