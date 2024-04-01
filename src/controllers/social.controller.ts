@@ -2,12 +2,15 @@ import { NextFunction } from "express";
 import { IRequest, IResponse, ISelectedFacebookPage, ISocialType, IVerifyFacebook, IVerifyLinkedin } from "../interfaces";
 import { socialService } from "../services";
 import Controller from "./base.controller";
+const ENV = process.env;
 
 // TODO : Social app integration
 class SocialController extends Controller {
 
     async getSocialLogin(req: IRequest<any, any, ISocialType>, res: IResponse<any>, next: NextFunction) {
         try {
+            console.log(req.query);
+            
             const { social_type } = req.query;
             res.json({
                 message: "Social Login",
@@ -36,11 +39,12 @@ class SocialController extends Controller {
     // DONE : Facebook verification
     async verifyFacebook(req: IRequest<IVerifyFacebook>, res: IResponse<any>, next: NextFunction) {
         try {
-            const fb = await socialService.verifyFacebook(req.body);
-            res.json({
-                message: "Facebook verified",
-                data: []
-            });
+            const fb = await socialService.verifyFacebook(req.query);
+            // res.json({
+            //     message: "Facebook verified",
+            //     data: []
+            // });
+            res.redirect(`${ENV.REDIRECT_URL}agent/social-media?success=1&pages=Fb&name=Facebook`);
         } catch (error) {
             next(error);
         }

@@ -43,6 +43,7 @@ class CampaignController extends Controller {
     async editCampaign(req: IRequest<IEditCampaignBody>, res: IResponse<any>, next: NextFunction) {
         try {
             const body = req.body;
+            const id = req.params.id
             // logged in user
             const campaignBody = {
                 campaign_name: body.name,
@@ -50,7 +51,7 @@ class CampaignController extends Controller {
                 color: body.color
             };
             // call service
-            await campaignService.editCampaign(campaignBody, body.id);
+            await campaignService.editCampaign(campaignBody, id);
             res.json({
                 message: "Campaign edited successfully",
                 data: body

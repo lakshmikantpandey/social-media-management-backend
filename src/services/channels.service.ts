@@ -37,7 +37,7 @@ class ChannelService {
             .first().castTo<IUserChannel>();
 
         if(!channel){
-            throw new NotFoundError("Coonected account not found");
+            throw new NotFoundError("Connected account not found");
         }
         // delete channel
         await UserChannel.query().findById(id).patch({

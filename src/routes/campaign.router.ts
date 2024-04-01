@@ -7,7 +7,7 @@ const campaignRouter = Router();
 
 campaignRouter.get("/campaigns", [ jwtMiddleware ] , CampaignController.getCampaigns);
 campaignRouter.post("/campaign", [ validSchema(validateSchema.createCampaign), jwtMiddleware ] , CampaignController.createCampaign);
-campaignRouter.put("/campaign", [ validSchema(validateSchema.editCampaign), jwtMiddleware ] , CampaignController.editCampaign);
+campaignRouter.put("/campaign/:id", [ validSchema(validateSchema.editCampaign), jwtMiddleware ] , CampaignController.editCampaign);
 campaignRouter.delete("/campaign/:id", [ validSchema(validateSchema.deleteCampaign), jwtMiddleware ] , CampaignController.deleteCampaign);
 
 export default campaignRouter;

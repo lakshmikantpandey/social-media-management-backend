@@ -77,9 +77,10 @@ class UsersService {
         });
         return user;
     }
-
+    
     async userLogin(body: IUserLogin) {
         const user = await this.findByUsername(body.username) as IUser;
+        console.log({user});
         if(!user){
             throw new UnauthorizedError("Invalid username or password");
         }
@@ -100,6 +101,8 @@ class UsersService {
             mobile: user.mobile
         };
         const token = jwtHelper.generateToken(userDetail).token;
+        console.log({token});
+        
         return {...userDetail, token};
     }
 

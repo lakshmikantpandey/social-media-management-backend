@@ -251,7 +251,6 @@ class PostService {
 		const userChannelKnex = UserChannel.knex();
 		const channels = await userChannelKnex.raw("SELECT id, channel_type, user_auth FROM user_channels where id in (?)", [...body.channel_id as any]);
 		console.log(channels.rows);
-
 	}
 
 	async campaignPostDelete(body: ICampaignPostDeleteBody) {

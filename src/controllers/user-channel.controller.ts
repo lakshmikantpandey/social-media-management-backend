@@ -28,7 +28,6 @@ class UserChannelController extends Controller {
             next(error);
         }
     }
-
 }
 
 export default new UserChannelController();

@@ -6,6 +6,7 @@ import { validateSchema } from '../validations';
 
 export const validSchema = (schema: AnyZodObject) => {
     return async (req: Request, res: Response, next: NextFunction) => {
+        
         const validate = await schema.safeParseAsync({
             body: req.body,
             query: req.query,

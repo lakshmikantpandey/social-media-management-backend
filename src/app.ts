@@ -40,7 +40,7 @@ routes.map(route => {
 // not found handler
 app.get('*', (req, res) => {
 	res.json({
-		message: 'Not Found',
+		message: 'Page Not Found',
 	});
 });
 

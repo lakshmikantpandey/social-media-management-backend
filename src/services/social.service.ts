@@ -72,9 +72,12 @@ class SocialService {
         }
     }
 
-    async verifyFacebook(body: IVerifyFacebook) {
+    async verifyFacebook(query: any) {
+        
         try {
-            const accessToken = await socialAccounts["Fb"].getAccessToken({ Code: body.code });
+            const state = query['state'];
+            const code = query['code'];
+            const accessToken = await socialAccounts["Fb"].getAccessToken({ Code: code });
             // save in database
             const auth = {
                 id: "",
@@ -89,7 +92,7 @@ class SocialService {
                 user_auth: JSON.stringify(auth),
                 expired_at: accessToken.ExpireDate,
                 is_active: true
-            }).where('channel_token', decodeURIComponent(body.state.replace('#_=_', '')));
+            }).where('channel_token', decodeURIComponent(state.replace('#_=_', '')));
             return accessToken.Token ? true : false;
         } catch (error) {
             throw error;
